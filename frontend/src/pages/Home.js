@@ -15,9 +15,9 @@ const Header = styled('div')({
   width:"100%",
   justifyContent:"center",
   alignItems:"center",
-  gap:"50px",
+  gap:"100px",
   position:"relative",
-  top:"15%"
+  top:"10%"
 })
 
 const TextContainer = styled('div')({
@@ -39,7 +39,8 @@ const SubTitle = styled('div')({
 })
 
 const Search = styled(Button)({
-    borderRadius:"0px"
+    borderRadius:"0px",
+    fontFamily: "Roboto, sans-serif",
 })
 
 
@@ -50,7 +51,7 @@ const Home = () => {
     <Page>
       <NavBar></NavBar>
       <Header>
-        <img src={Icon} width="350px" height="350px"></img>
+        <img src={Icon} width="450px"></img>
         <TextContainer>
           <Title>
             SEARCH FOR A MOVIE

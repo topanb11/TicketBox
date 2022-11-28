@@ -6,10 +6,8 @@ import Logo from "../assets/logo.png"
 
 const Container = styled("div")({
   display: "flex",
-  width: "100%",
-  justifyContent: "space-around",
-  paddingTop: "20px",
-  paddingBottom:"20px"
+  justifyContent: "space-between",
+  padding: "20px 10%"
 });
 
 const NavButton = styled(Button)({
@@ -39,7 +37,7 @@ const NavBar = (props) => {
   if (loggedIn) {
     return (
       <Container>
-        <Icon src={Logo} width="50px" onClick={() => navigate("/")}></Icon>
+        <Icon src={Logo} width="75px" onClick={() => navigate("/")}></Icon>
         <TextContainer>
             <NavButton variant="text" onClick={() => navigate("/services")}>
             Log Out
@@ -50,7 +48,7 @@ const NavBar = (props) => {
   } else {
     return (
       <Container>
-          <Icon src={Logo} width="50px" onClick={() => navigate("/")}></Icon>
+          <Icon src={Logo} width="75px" onClick={() => navigate("/")}></Icon>
           <TextContainer>
                 <NavButton variant="text" onClick={() => navigate("/register")}>
                 Create Account
