@@ -34,32 +34,108 @@ const Title = styled('div')({
 const SubTitle = styled('div')({
   fontFamily: "Roboto, sans-serif",
   color:"#0F1020",
-  fontWeight:"100",
+  fontWeight:"800",
   fontSize:"24px"
 })
 
-const Search = styled(Button)({
+const Body = styled('div')({
+    fontFamily: "Roboto, sans-serif",
+    color:"#0F1020",
+    fontWeight:"400",
+    fontSize:"20px"
+  })
+
+const SearchButton = styled(Button)({
     borderRadius:"0px",
     fontFamily: "Roboto, sans-serif",
+    boxShadow:"none",
+    height:"45px"
+})
+
+const CancelButton = styled(Button)({
+    borderRadius:"0px",
+    fontFamily: "Roboto, sans-serif",
+    boxShadow:"none",
+})
+
+const CancelContainer = styled('div')({
+    display:"flex",
+    width:"100%",
+    justifyContent:"center",
+    alignItems:"center",
+    gap:"20px",
+    position:"relative",
+    top:"20%",
+    flexDirection:"column",
+    paddingBottom:"7%"
+})
+
+const CancelSubContainer = styled('div')({
+    display:"flex",
+    gap:"20px",
+    textAlign:"center"
 })
 
 
 const Home = () => {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [ticketNo, setTicketNo] = useState("");
+
+    const handleChange = (event) => {
+        if (event.target.id == "search"){
+            setSearch(event.target.value);
+        }
+        if (event.target.id == "ticketNo"){
+            setTicketNo(event.target.value);
+        } 
+    }
+
+    const handleSearchSubmit = () => {
+        console.log(search)
+    }
+
+    const handleCancelSubmit = () => {
+        console.log(ticketNo);
+        setTicketNo("");
+    }
 
   return(
     <Page>
       <NavBar></NavBar>
       <Header>
-        <img src={Icon} width="450px"></img>
+        <img src={Icon} width="25%"></img>
         <TextContainer>
           <Title>
             SEARCH FOR A MOVIE
           </Title>
-          <TextField></TextField>
-          <Search variant="contained">SEARCH</Search>
+          <TextField
+            value={search}
+            onChange={handleChange}
+            id="search"
+          >
+          </TextField>
+          <SearchButton variant="contained" onClick={handleSearchSubmit}>Search</SearchButton>
         </TextContainer>
       </Header>
+      <CancelContainer>
+          <SubTitle>
+              CANCEL TICKET
+          </SubTitle>
+          <Body>
+            Looking to cancel a purchased ticket? Enter your ticket number below
+          </Body>
+          <CancelSubContainer>
+            <TextField
+                label="Ticket number"
+                id="ticketNo"
+                onChange={handleChange}
+                value={ticketNo}
+            >
+            </TextField>
+            <CancelButton variant="outlined" onClick={handleCancelSubmit} disabled={ticketNo.trim()==""}>CANCEL TICKET</CancelButton>
+          </CancelSubContainer>
+      </CancelContainer>
     </Page>
   );
 }
