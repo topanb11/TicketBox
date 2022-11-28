@@ -33,6 +33,15 @@ const Title = styled("div")({
   fontSize: "48px",
 });
 
+const Body = styled("div")({
+  fontFamily: "Roboto, sans-serif",
+  color: "#0F1020",
+  fontWeight: "400",
+  fontSize: "20px",
+  width: "100%",
+  textAlign: "center",
+});
+
 const Register = () => {
   const navigate = useNavigate();
 
@@ -149,6 +158,7 @@ const Register = () => {
           >
             REGISTER
           </SubmitButton>
+          <Body>NOTE: You will be charged $9.99 anually </Body>
         </FormContainer>
       </Wrapper>
     </>
