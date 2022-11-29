@@ -62,6 +62,7 @@ const Checkout = (props) => {
     if (loggedIn) {
       var data = {
         total: 17.5 * count,
+        selectedSeats: props.seats,
       };
     } else {
       var data = {
@@ -73,6 +74,7 @@ const Checkout = (props) => {
         ccv,
         expDate,
         total: 17.5 * count,
+        selectedSeats: props.seats,
       };
     }
     console.log(data);
