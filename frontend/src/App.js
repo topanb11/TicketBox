@@ -4,6 +4,8 @@ import { ThemeProvider } from "@emotion/react";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import LogIn from "./pages/LogIn";
+import SeatSelection from "./pages/SeatSelection";
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -21,6 +23,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<LogIn />} />
+            <Route path="/seatselection" element={<SeatSelection />} />
           </Routes>
         </BrowserRouter>
       </div>
