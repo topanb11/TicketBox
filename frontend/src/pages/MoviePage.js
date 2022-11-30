@@ -14,7 +14,7 @@ const Header = styled('div')({
 const Title = styled('div')({
   fontFamily: "Bebas Neue, cursive",
   fontSize:"72px",
-	marginLeft: "2.5%"
+	marginLeft: "10%"
 })
 
 const MoviePage = () => {
