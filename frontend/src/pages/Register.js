@@ -55,15 +55,16 @@ const Register = () => {
   const [expDate, setExpDate] = useState("");
 
   const validForm = () => {
+    const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     return (
-      email !== "" &&
+      emailRgx.test(email) &&
       password != "" &&
       firstName != "" &&
       lastName != "" &&
       address != "" &&
-      ccNo != "" &&
-      ccv != "" &&
-      expDate != ""
+      ccNo.length === 16 &&
+      ccv.length === 3 &&
+      expDate.length === 4
     );
   };
 
@@ -82,6 +83,27 @@ const Register = () => {
     // Axios.post("http://localhost:3001/create-user", data).then((res) => {
     //   console.log(res);
     // });
+  };
+
+  const handleCCInput = (event) => {
+    const val = event.target.value;
+    if (val === "" || (val.length < 17 && /^-?\d+$/.test(val))) {
+      setCCNo(val);
+    }
+  };
+
+  const handleCCVInput = (event) => {
+    const val = event.target.value;
+    if (val === "" || (val.length < 4 && /^-?\d+$/.test(val))) {
+      setCCV(val);
+    }
+  };
+
+  const handleExpDateInput = (event) => {
+    const val = event.target.value;
+    if (val === "" || (val.length < 5 && /^-?\d+$/.test(val))) {
+      setExpDate(val);
+    }
   };
 
   return (
@@ -128,7 +150,7 @@ const Register = () => {
           />
           <TextField
             value={ccNo}
-            onChange={(event) => setCCNo(event.target.value)}
+            onChange={(event) => handleCCInput(event)}
             id="Credit Card Number"
             label="Credit Card Number"
             variant="outlined"
@@ -136,7 +158,7 @@ const Register = () => {
           <div style={{ display: "flex", gap: "10px" }}>
             <TextField
               value={ccv}
-              onChange={(event) => setCCV(event.target.value)}
+              onChange={(event) => handleCCVInput(event)}
               id="CCV"
               label="CCV"
               variant="outlined"
@@ -144,7 +166,7 @@ const Register = () => {
             />
             <TextField
               value={expDate}
-              onChange={(event) => setExpDate(event.target.value)}
+              onChange={(event) => handleExpDateInput(event)}
               id="Expiration Date"
               label="Expiration Date"
               variant="outlined"
