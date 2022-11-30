@@ -92,9 +92,7 @@ const Home = () => {
     }
 
     const handleSearchSubmit = () => {
-				if (search != "") {
-					navigate("/movies", {state: {name: search}});
-				}
+				navigate("/movies", {state: {name: search}});
     }
 
     const handleCancelSubmit = () => {
