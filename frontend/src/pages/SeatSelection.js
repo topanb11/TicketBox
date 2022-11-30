@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import NavBar from "../components/NavBar.js";
 import Grid from "@mui/material/Grid";
 import Seat from "../components/Seat";
-import Legend from "../assets/seats_legend.png";
+import Legend from "../components/Legend";
 import Checkout from "../components/Checkout.js";
 
 const Wrapper = styled("div")({
@@ -106,7 +106,7 @@ const SeatSelection = () => {
           <SeatContainer container spacing={2}>
             {seats.map((seat) => renderSeat(seat))}
           </SeatContainer>
-          <img src={Legend} width="40%"></img>
+          <Legend></Legend>
         </TheatreContainer>
         <Checkout seats={selectedSeats}></Checkout>
       </Wrapper>
