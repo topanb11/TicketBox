@@ -36,24 +36,25 @@ const Checkout = (props) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [ccNo, setCcNo] = useState("");
+  const [ccNo, setCCNo] = useState("");
   const [ccv, setCCV] = useState("");
   const [expDate, setExpDate] = useState("");
 
   const count = props.seats.length;
 
   const validForm = () => {
+    const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     if (loggedIn) {
       return count !== 0;
     }
     return (
       firstName !== "" &&
       lastName !== "" &&
-      email != "" &&
+      emailRgx.test(email) &&
       address != "" &&
-      ccNo != "" &&
-      ccv != "" &&
-      expDate != "" &&
+      ccNo.length === 16 &&
+      ccv.length === 3 &&
+      expDate.length === 4 &&
       count !== 0
     );
   };
@@ -78,6 +79,27 @@ const Checkout = (props) => {
       };
     }
     console.log(data);
+  };
+
+  const handleCCInput = (event) => {
+    const val = event.target.value;
+    if (val === "" || (val.length < 17 && /^-?\d+$/.test(val))) {
+      setCCNo(val.trim());
+    }
+  };
+
+  const handleCCVInput = (event) => {
+    const val = event.target.value;
+    if (val === "" || (val.length < 4 && /^-?\d+$/.test(val))) {
+      setCCV(val.trim());
+    }
+  };
+
+  const handleExpDateInput = (event) => {
+    const val = event.target.value;
+    if (val === "" || (val.length < 5 && /^-?\d+$/.test(val))) {
+      setExpDate(val.trim());
+    }
   };
 
   if (loggedIn) {
@@ -148,7 +170,7 @@ const Checkout = (props) => {
               fullWidth
               label="Credit Card Number"
               value={ccNo}
-              onChange={(event) => setCcNo(event.target.value)}
+              onChange={handleCCInput}
             ></TextField>
           </Grid>
           <Grid item xs={6}>
@@ -156,7 +178,7 @@ const Checkout = (props) => {
               fullWidth
               label="CCV"
               value={ccv}
-              onChange={(event) => setCCV(event.target.value)}
+              onChange={handleCCVInput}
             ></TextField>
           </Grid>
           <Grid item xs={6}>
@@ -164,7 +186,7 @@ const Checkout = (props) => {
               fullWidth
               label="Expiration Date"
               value={expDate}
-              onChange={(event) => setExpDate(event.target.value)}
+              onChange={handleExpDateInput}
             ></TextField>
           </Grid>
           <Grid item xs={12}>

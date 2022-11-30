@@ -32,6 +32,7 @@ const SubmitButton = styled(Button)({
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
   const handleSubmit = () => {
     const data = {
@@ -66,7 +67,7 @@ const LogIn = () => {
           />
           <SubmitButton
             variant="contained"
-            disabled={email === "" || password === ""}
+            disabled={emailRgx.test(email) || password === ""}
             onClick={handleSubmit}
             sx={{ color: "white" }}
             fullWidth
