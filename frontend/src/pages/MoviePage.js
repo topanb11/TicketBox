@@ -1,6 +1,21 @@
 import React, { useState } from "react";
+import { styled } from '@mui/system';
 import { useLocation } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import MovieItem from "../components/MovieItem";
+
+const Header = styled('div')({
+  display: "flex",
+  width: "100%",
+  justifyContent: "start",
+	marginTop: "2.5%",
+})
+
+const Title = styled('div')({
+  fontFamily: "Bebas Neue, cursive",
+  fontSize:"72px",
+	marginLeft: "2.5%"
+})
 
 const MoviePage = () => {
 	const location = useLocation();
@@ -8,8 +23,10 @@ const MoviePage = () => {
 	return (
 		<>
 			<NavBar/>
-			<h1>movie page</h1>
-			<h3>movie search is: {location.state.name}</h3>
+			<Header>
+				<Title>SEARCH RESULTS FOR "{location.state.name}"</Title>
+			</Header>
+			<MovieItem title={location.state.name}/>
 		</>
 	)
  }
