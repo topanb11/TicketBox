@@ -7,6 +7,8 @@ import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 
 const MovieListContainer = styled('ul')({
+	paddingLeft: "10%",
+	paddingRight: "10%"
 });
 
 const MovieListItem = styled('li')({
