@@ -92,7 +92,9 @@ const Home = () => {
     }
 
     const handleSearchSubmit = () => {
-        console.log(search)
+				if (search != "") {
+					navigate("/movies", {state: {name: search}});
+				}
     }
 
     const handleCancelSubmit = () => {

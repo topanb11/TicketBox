@@ -4,6 +4,7 @@ import { ThemeProvider } from "@emotion/react";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import LogIn from "./pages/LogIn";
+import MoviePage from "./pages/MoviePage";
 import SeatSelection from "./pages/SeatSelection";
 
 const theme = createTheme({
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<LogIn />} />
+						<Route path="/movies" element={<MoviePage />}/>
             <Route path="/seatselection" element={<SeatSelection />} />
           </Routes>
         </BrowserRouter>
