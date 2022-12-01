@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { styled } from "@mui/system";
 import NavBar from "../components/NavBar.js";
 import Grid from "@mui/material/Grid";
@@ -49,6 +49,9 @@ const SeatContainer = styled(Grid)({
 });
 
 const SeatSelection = () => {
+	// Object that has movie attributes
+	const location = useLocation();
+	console.log(location.state);
   const [selectedSeats, setSelectedSeats] = useState([]); // keep track of which seats have been selected
   const unavailableSeats = [1, 5, 7, 12, 25, 34, 35]; // hardcoded unavailable seats
   // 48 seats per theatre

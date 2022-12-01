@@ -5,6 +5,7 @@ import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
+import { Navigate, useNavigate } from "react-router";
 
 const MovieListContainer = styled("ul")({
   paddingLeft: "10%",
@@ -62,6 +63,7 @@ const DropdownMenuStyle = {
 };
 
 const MovieItem = ({ title }) => {
+	const navigate = useNavigate();
   const [time, setTime] = useState(0);
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState([]);
@@ -72,7 +74,8 @@ const MovieItem = ({ title }) => {
   };
 
   const handleClick = (id, name) => {
-    console.log(id, name, time);
+    console.log("movie page", id, name, time);
+		navigate("/seatselection", {state: {moveID: id, movieTitle: name, showtime: time}});
   };
 
   return (
