@@ -51,6 +51,7 @@ const SeatContainer = styled(Grid)({
 const SeatSelection = () => {
 	// Object that has movie attributes
 	const location = useLocation();
+
 	console.log(location.state);
   const [selectedSeats, setSelectedSeats] = useState([]); // keep track of which seats have been selected
   const unavailableSeats = [1, 5, 7, 12, 25, 34, 35]; // hardcoded unavailable seats
@@ -102,8 +103,8 @@ const SeatSelection = () => {
     <>
       <NavBar></NavBar>
       <Wrapper>
-        <Title>Devotion</Title>
-        <Body>November 22, 7:30 PM</Body>
+        <Title>{location.state.movieTitle}</Title>
+        <Body>{location.state.showtime} PM</Body>
         <TheatreContainer>
           <Screen>SCREEN</Screen>
           <SeatContainer container spacing={2}>
