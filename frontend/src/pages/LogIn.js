@@ -4,6 +4,10 @@ import { styled } from "@mui/system";
 import Logo from "../assets/logo.svg";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import DialogTitle from "@mui/material/DialogTitle";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import { Link, useNavigate } from "react-router-dom";
 
 const Wrapper = styled("div")({
   width: "100%",
@@ -22,17 +26,73 @@ const FormContainer = styled("div")({
   width: "20%",
 });
 
+const ButtonContainer = styled("div")({
+  display: "flex",
+  width: "100%",
+  gap: "20px",
+  paddingTop: "20px",
+  justifyContent: "center",
+});
+
 const SubmitButton = styled(Button)({
   borderRadius: "0px",
   fontFamily: "Roboto, sans-serif",
   boxShadow: "none",
-  height: "45px",
+});
+
+const CancelButton = styled(Button)({
+  borderRadius: "0px",
+  fontFamily: "Roboto, sans-serif",
+  boxShadow: "none",
+});
+
+const Body = styled("div")({
+  fontFamily: "Roboto, sans-serif",
+  color: "#0F1020",
+  fontWeight: "400",
+  fontSize: "20px",
 });
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const navigate = useNavigate();
+
   const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  const isRU = true; // replace with API data
+  const validRU = false; // replace with API data
+
+  const continueAsGuest = () => {
+    setDialogOpen(false);
+    navigate("/");
+  };
+
+  const reactivateAccount = () => {
+    // API Call
+  };
+
+  const renderDialog = () => {
+    return (
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>Unable to log in</DialogTitle>
+        <DialogContent>
+          <Body>
+            Your account has expired. Please reactivate your account for $9.99
+            or head back to the home page to continue as a guest.
+          </Body>
+          <ButtonContainer>
+            <CancelButton variant="outlined" onClick={continueAsGuest}>
+              CONTINUE AS GUEST
+            </CancelButton>
+            <SubmitButton variant="contained" onClick={reactivateAccount}>
+              ACTIVATE ACCOUNT
+            </SubmitButton>
+          </ButtonContainer>
+        </DialogContent>
+      </Dialog>
+    );
+  };
 
   const handleSubmit = () => {
     const data = {
@@ -40,6 +100,10 @@ const LogIn = () => {
       password,
     };
     console.log(data);
+
+    if (isRU && !validRU) {
+      setDialogOpen(true);
+    }
   };
 
   return (
@@ -67,7 +131,7 @@ const LogIn = () => {
           />
           <SubmitButton
             variant="contained"
-            disabled={emailRgx.test(email) || password === ""}
+            disabled={!emailRgx.test(email) || password === ""}
             onClick={handleSubmit}
             sx={{ color: "white" }}
             fullWidth
@@ -76,6 +140,7 @@ const LogIn = () => {
           </SubmitButton>
         </FormContainer>
       </Wrapper>
+      {renderDialog()}
     </>
   );
 };
