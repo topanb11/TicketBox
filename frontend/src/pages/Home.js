@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { styled } from "@mui/system";
 import NavBar from "../components/NavBar.js";
@@ -105,10 +105,12 @@ const Home = () => {
     setTicketNo("");
   };
 
-	axios.get("http://localhost:8080/api/v1/movie/all")
-		.then(function (response) {
-			setMovies(response.data);
-		})
+	useEffect(() => {
+		axios.get("http://localhost:8080/api/v1/movie/all")
+			.then(function (response) {
+				setMovies(response.data);
+			})
+	}, []);
 
   return (
     <Page>
