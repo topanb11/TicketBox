@@ -25,7 +25,8 @@ public class MoviePostgresAccessService implements MovieDao{
 			List<Movie> movies = jdbcTemplate.query(QUERY, (resultSet, i) -> {
 				return new Movie(
 					UUID.fromString(resultSet.getString("id")),
-					resultSet.getString("name")
+					resultSet.getString("name"),
+					resultSet.getString("cover")
 				);
 			});
 			return movies;
