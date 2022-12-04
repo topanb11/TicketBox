@@ -44,6 +44,7 @@ const Body = styled("div")({
 
 const Register = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
