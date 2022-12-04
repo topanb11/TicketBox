@@ -82,7 +82,7 @@ const MovieItem = ({ data, title }) => {
         {data
           .filter((data) => data.name.toLowerCase().includes(title))
           .map((data) => (
-            <MovieListItem key={data.movieID}>
+            <MovieListItem key={data.id}>
               <MovieImg src={data.cover} />
               <MovieDetailContainer>
                 <MovieTitle>{data.name}</MovieTitle>

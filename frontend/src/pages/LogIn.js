@@ -110,6 +110,7 @@ const LogIn = () => {
 			if (isRU && !validRU) {
 				setDialogOpen(true);
 			}
+			navigate("/");
 		})
 		.catch(response => {
 			alert(response.response.data.message);
