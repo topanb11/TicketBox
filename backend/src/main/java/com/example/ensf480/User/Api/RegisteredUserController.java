@@ -27,8 +27,8 @@ public class RegisteredUserController {
     }
 
     @PostMapping(path = "login")
-    public double checkCredentials(@RequestBody Map<String, Object> userMap) {
-        return userService.checkCredentials(userMap);
+    public RegisteredUser checkCredentials(@RequestBody Map<String, Object> userMap) {
+        return userService.login(userMap);
     }
 
 }
