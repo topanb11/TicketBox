@@ -20,7 +20,7 @@ VALUES
 INSERT INTO ru (id, firstname, lastname, email, password, address, creditcardnumber, creditcardexpirationdate, ccv, validUntil)
 VALUES
 	(uuid_generate_v4(), 'Topan', 'Nguyen', 'topan@gmail.com', 'test', '123 street', '3423458255', '01/08/29', '555', '2023-12-04T17:22:28.814+00:00'),
-	(uuid_generate_v4(), 'Topan', 'Nguyen', 'topan@gmail.com', 'test', '123 street', '3423458255', '01/08/29', '555', '2022-12-03T17:22:28.814+00:00');
+	(uuid_generate_v4(), 'Brian', 'Nguyen', 'brian@gmail.com', 'test', '123 street', '3423458255', '01/08/29', '555', '2022-12-03T17:22:28.814+00:00');
 
 -- Generating list of showtimes
 INSERT INTO showtime (id, movieid, showroom, showtime)
