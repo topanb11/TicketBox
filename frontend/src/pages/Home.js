@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import NavBar from "../components/NavBar.js";
 import Logo from "../assets/logo.png";
 import Icon from "../assets/Saly-1.png";
-import { Button, TextField } from "@mui/material";
+import { alertClasses, Button, TextField } from "@mui/material";
 import { UserContext } from "../context/UserContext.js";
 import axios from "axios";
 
@@ -102,14 +102,17 @@ const Home = () => {
 
   const handleCancelSubmit = () => {
 		var isRu = false;
-		if (user !== null) {
+		if (user == null) {
 			isRu = true;
 		}
 		axios.delete("http://localhost:8080/api/v1/ticket/delete", {data:{
 			ticketNo: ticketNo,
 			isRu: isRu
 			}
-		});
+		})
+		.then( response => {
+			alert(response.data);
+			});
   };
 
 	useEffect(() => {
