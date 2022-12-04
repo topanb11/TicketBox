@@ -1,0 +1,5 @@
+DROP TABLE flyway_schema_history;
+DROP TABLE movie;
+DROP TABLE ru;
+DROP TABLE showtime;
+DROP TABLE ticket;
