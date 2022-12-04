@@ -101,7 +101,7 @@ const Home = () => {
   };
 
   const handleCancelSubmit = () => {
-    console.log(ticketNo);
+    console.log(ticketNo.length);
     setTicketNo("");
   };
 
@@ -140,11 +140,12 @@ const Home = () => {
             id="ticketNo"
             onChange={handleChange}
             value={ticketNo}
+						inputProps={{ maxLength: 36 }}
           ></TextField>
           <CancelButton
             variant="outlined"
             onClick={handleCancelSubmit}
-            disabled={ticketNo.trim() == ""}
+            disabled={ticketNo.trim() == "" || ticketNo.length != 36}
           >
             CANCEL TICKET
           </CancelButton>
