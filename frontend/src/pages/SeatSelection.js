@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { styled } from "@mui/system";
 import NavBar from "../components/NavBar.js";
@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Seat from "../components/Seat";
 import Legend from "../components/Legend";
 import Checkout from "../components/Checkout.js";
+import { UserContext } from "../context/UserContext.js";
 
 const Wrapper = styled("div")({
   display: "flex",
@@ -49,10 +50,9 @@ const SeatContainer = styled(Grid)({
 });
 
 const SeatSelection = () => {
-	// Object that has movie attributes
-	const location = useLocation();
-
-	console.log(location.state);
+  // Object that has movie attributes
+  const location = useLocation();
+  const { user, setUser } = useContext(UserContext);
   const [selectedSeats, setSelectedSeats] = useState([]); // keep track of which seats have been selected
   const unavailableSeats = [1, 5, 7, 12, 25, 34, 35]; // hardcoded unavailable seats
   // 48 seats per theatre
