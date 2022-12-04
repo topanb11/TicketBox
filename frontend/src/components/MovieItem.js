@@ -5,7 +5,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import { Navigate, useNavigate } from "react-router";
-// import data from "./TestData";
 
 const MovieListContainer = styled("ul")({
   paddingLeft: "10%",
@@ -66,7 +65,6 @@ const MovieItem = ({ data, title }) => {
 	const navigate = useNavigate();
   const [time, setTime] = useState(0);
   const [movies, setMovies] = useState([]);
-	console.log(data, title);
 
   const handleTimeChange = (event) => {
     console.log(event.target.value);
