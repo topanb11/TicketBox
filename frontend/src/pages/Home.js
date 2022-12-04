@@ -101,8 +101,15 @@ const Home = () => {
   };
 
   const handleCancelSubmit = () => {
-    console.log(ticketNo.length);
-    setTicketNo("");
+		var isRu = false;
+		if (user !== null) {
+			isRu = true;
+		}
+		axios.delete("http://localhost:8080/api/v1/ticket/delete", {data:{
+			ticketNo: ticketNo,
+			isRu: isRu
+			}
+		});
   };
 
 	useEffect(() => {
