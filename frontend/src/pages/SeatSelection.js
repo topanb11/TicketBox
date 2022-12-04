@@ -103,7 +103,7 @@ const SeatSelection = () => {
     <>
       <NavBar></NavBar>
       <Wrapper>
-        <Title>{location.state.movieTitle}</Title>
+        <Title>{location.state.title}</Title>
         <Body>{location.state.showtime} PM</Body>
         <TheatreContainer>
           <Screen>SCREEN</Screen>
