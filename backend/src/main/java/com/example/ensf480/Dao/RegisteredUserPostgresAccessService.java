@@ -15,7 +15,6 @@ import com.example.ensf480.Model.RegisteredUser;
 @Repository("Postgres")
 public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
 
-
     private final JdbcTemplate jdbcTemplate;
     private final String INSERT_QUERY = "INSERT INTO ru (id, firstName, lastName, email, password, address, creditCardNumber, creditCardExpirationDate, ccv, validUntil) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private final String CHECK_EMAIL_EXISTS = "SELECT COUNT(*) FROM ru WHERE email = ?";
@@ -29,14 +28,17 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
     @Override
     public RegisteredUser insertPerson(RegisteredUser person) {
         int count = jdbcTemplate.queryForObject(CHECK_EMAIL_EXISTS, Integer.class, person.getEmail());
-        
+
         if (count > 0) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
 
         Timestamp validUntilTimestamp = new Timestamp(person.getValidUntil().getTime());
-        jdbcTemplate.update(INSERT_QUERY, new Object[] {person.getId(), person.getFirstName(), person.getLastName(), person.getEmail(), person.getPassword(), person.getAddress(), person.getCreditCardNumber(), person.getExpiryDate(), person.getCcv(), validUntilTimestamp}); 
-       
+        jdbcTemplate.update(INSERT_QUERY,
+                new Object[] { person.getId(), person.getFirstName(), person.getLastName(), person.getEmail(),
+                        person.getPassword(), person.getAddress(), person.getCreditCardNumber(), person.getExpiryDate(),
+                        person.getCcv(), validUntilTimestamp });
+
         return person;
     }
 
@@ -46,26 +48,23 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
         try {
             result = jdbcTemplate.queryForObject(GET_USER, (resultSet, i) -> {
                 RegisteredUser temp = new RegisteredUser(
-                    UUID.fromString(resultSet.getString("id")),
-                    resultSet.getString("firstName"),
-                    resultSet.getString("lastName"),
-                    resultSet.getString("email"),
-                    resultSet.getString("password"),
-                    resultSet.getString("address"),
-                    resultSet.getString("creditCardNumber"),
-                    resultSet.getString("ccv"),
-                    resultSet.getString("creditCardExpirationDate")
-                );
+                        UUID.fromString(resultSet.getString("id")),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password"),
+                        resultSet.getString("address"),
+                        resultSet.getString("creditCardNumber"),
+                        resultSet.getString("ccv"),
+                        resultSet.getString("creditCardExpirationDate"));
                 temp.setValidUntil(resultSet.getTimestamp("validUntil"));
                 return temp;
             }, email, password);
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
-        
+
         return result;
     }
 
-    
-    
 }
