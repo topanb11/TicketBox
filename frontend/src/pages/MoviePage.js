@@ -26,7 +26,7 @@ const MoviePage = () => {
 			<Header>
 				<Title>SEARCH RESULTS FOR "{location.state.name}"</Title>
 			</Header>
-			<MovieItem title={location.state.name}/>
+			<MovieItem data={location.state.movies} title={location.state.name}/>
 		</>
 	)
  }

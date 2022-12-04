@@ -6,6 +6,7 @@ import Logo from "../assets/logo.png";
 import Icon from "../assets/Saly-1.png";
 import { Button, TextField } from "@mui/material";
 import { UserContext } from "../context/UserContext.js";
+import axios from "axios";
 
 const Page = styled("div")({
   height: "100vh",
@@ -75,12 +76,15 @@ const CancelSubContainer = styled("div")({
   display: "flex",
   gap: "20px",
   textAlign: "center",
-});
+});	
+
+
 
 const Home = () => {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [ticketNo, setTicketNo] = useState("");
+	const [movies, setMovies] = useState([]);
   const { user, setUser } = useContext(UserContext);
 
   const handleChange = (event) => {
@@ -93,13 +97,18 @@ const Home = () => {
   };
 
   const handleSearchSubmit = () => {
-    navigate("/movies", { state: { name: search } });
+    navigate("/movies", { state: { name: search, movies: movies } });
   };
 
   const handleCancelSubmit = () => {
     console.log(ticketNo);
     setTicketNo("");
   };
+
+	axios.get("http://localhost:8080/api/v1/movie/all")
+		.then(function (response) {
+			setMovies(response.data);
+		})
 
   return (
     <Page>
