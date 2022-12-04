@@ -14,7 +14,7 @@ public class MovieService {
 		private final MovieDao movieDao;
 
 		@Autowired
-		public MovieService(@Qualifier("postgres")MovieDao movieDao) {
+		public MovieService(@Qualifier("PostgresMovieDao")MovieDao movieDao) {
 			this.movieDao = movieDao;
 		} 
 

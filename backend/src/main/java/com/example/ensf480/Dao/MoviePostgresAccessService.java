@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.ensf480.Model.Movie;
 
-@Repository("postgres")
+@Repository("PostgresMovieDao")
 public class MoviePostgresAccessService implements MovieDao{
 
 		private JdbcTemplate jdbcTemplate;
