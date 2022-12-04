@@ -1,4 +1,4 @@
-package com.example.ensf480.User.Api;
+package com.example.ensf480.Api;
 
 import java.util.Map;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ensf480.User.Model.RegisteredUser;
-import com.example.ensf480.User.Service.RegisteredUserService;
+import com.example.ensf480.Model.RegisteredUser;
+import com.example.ensf480.Service.RegisteredUserService;
 
 @RequestMapping("api/v1/user")
 @RestController

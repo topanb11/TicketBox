@@ -1,4 +1,4 @@
-package com.example.ensf480.User.Model;
+package com.example.ensf480.Model;
 
 import java.util.Calendar;
 import java.util.Date;

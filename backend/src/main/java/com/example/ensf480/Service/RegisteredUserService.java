@@ -1,4 +1,4 @@
-package com.example.ensf480.User.Service;
+package com.example.ensf480.Service;
 
 import java.util.Map;
 
@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.example.ensf480.User.Dao.RegisteredUserDao;
-import com.example.ensf480.User.Model.RegisteredUser;
+import com.example.ensf480.Dao.RegisteredUserDao;
+import com.example.ensf480.Model.RegisteredUser;
+
 
 @Service
 public class RegisteredUserService {

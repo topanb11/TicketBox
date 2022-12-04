@@ -1,4 +1,4 @@
-package com.example.ensf480.User.Dao;
+package com.example.ensf480.Dao;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
-import com.example.ensf480.User.Model.RegisteredUser;
+import com.example.ensf480.Model.RegisteredUser;
 
 @Repository("Postgres")
 public class RegisteredUserPostgresAccessService implements RegisteredUserDao {

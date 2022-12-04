@@ -6,7 +6,7 @@ CREATE TABLE ru (
     password VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     creditCardNumber VARCHAR(255) NOT NULL,
-    creditCardExpirationDate TIMESTAMP NOT NULL,
+    creditCardExpirationDate VARCHAR(255) NOT NULL,
     ccv VARCHAR(255) NOT NULL,
     validUntil TIMESTAMP NOT NULL
 );
