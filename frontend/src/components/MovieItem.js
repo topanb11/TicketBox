@@ -64,7 +64,6 @@ const DropdownMenuStyle = {
 const MovieItem = ({ data, title }) => {
 	const navigate = useNavigate();
   const [time, setTime] = useState(0);
-  const [movies, setMovies] = useState([]);
 
   const handleTimeChange = (event) => {
     console.log(event.target.value);

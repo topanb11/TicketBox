@@ -3,7 +3,6 @@ import { styled } from '@mui/system';
 import { useLocation } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import MovieItem from "../components/MovieItem";
-import covers from "../components/Covers";
 
 const Header = styled('div')({
   display: "flex",
@@ -20,24 +19,13 @@ const Title = styled('div')({
 
 const MoviePage = () => {
 	const location = useLocation();
-	var hash = Object.create(null);
-
-	// Merging movies with their respective covers
-	const data = location.state.movies;	
-	data.concat(covers).forEach((obj) => {
-		hash[obj.id] = Object.assign(hash[obj.id] || {}, obj);
-	});
-	var mergedData = Object.keys(hash).map((key) => {
-		return hash[key];
-	});
-
 	return (
 		<>
 			<NavBar/>
 			<Header>
 				<Title>SEARCH RESULTS FOR "{location.state.name}"</Title>
 			</Header>
-			<MovieItem data={mergedData} title={location.state.name}/>
+			<MovieItem data={location.state.movies} title={location.state.name}/>
 		</>
 	)
  }

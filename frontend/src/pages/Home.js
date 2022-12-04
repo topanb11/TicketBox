@@ -120,7 +120,7 @@ const Home = () => {
 			.then((response) => {
 				setMovies(response.data);
 			})
-	}, []);
+		}, []);
 
   return (
     <Page>
