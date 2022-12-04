@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.example.ensf480.Dao.RegisteredUserDao;
 import com.example.ensf480.Model.RegisteredUser;
 
-
 @Service
 public class RegisteredUserService {
     private final RegisteredUserDao userDao;

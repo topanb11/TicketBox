@@ -1,0 +1,7 @@
+CREATE TABLE ticket (
+    id UUID NOT NULL PRIMARY KEY,
+    showtimeId VARCHAR(255) NOT NULL,
+    seatNo INTEGER NOT NULL,
+    buyerEmail VARCHAR(255) NOT NULL,
+    ruFlag BOOLEAN NOT NULL
+);
