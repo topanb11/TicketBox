@@ -33,4 +33,9 @@ public class RegisteredUserController {
         return userService.login(userMap);
     }
 
+    @PostMapping(path = "reactivate")
+    public RegisteredUser reactivate(@RequestBody Map<String, Object> userMap) {
+        return userService.reactivate(userMap);
+    }
+
 }
