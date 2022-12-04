@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { styled } from "@mui/system";
 import NavBar from "../components/NavBar.js";
@@ -7,6 +7,7 @@ import Seat from "../components/Seat";
 import Legend from "../components/Legend";
 import Checkout from "../components/Checkout.js";
 import { UserContext } from "../context/UserContext.js";
+import axios from "axios";
 
 const Wrapper = styled("div")({
   display: "flex",
@@ -49,17 +50,47 @@ const SeatContainer = styled(Grid)({
   padding: "0 10% 5% 10%",
 });
 
+const movie = {
+  id: "0df2909f-813c-424f-a774-fa7df72cffe4",
+  name: "Men in Black",
+  cover:
+    "https://m.media-amazon.com/images/M/MV5BOTlhYTVkMDktYzIyNC00NzlkLTlmN2ItOGEyMWQ4OTA2NDdmXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg",
+};
+
+const showtime = {
+  id: "0df2909f-813c-424f-a774-fa7df72cfd12",
+  timestamp: "2023-12-04 19:00:00.814",
+};
+
 const SeatSelection = () => {
   // Object that has movie attributes
   const location = useLocation();
   const { user, setUser } = useContext(UserContext);
   const [selectedSeats, setSelectedSeats] = useState([]); // keep track of which seats have been selected
-  const unavailableSeats = [1, 5, 7, 12, 25, 34, 35]; // hardcoded unavailable seats
+  const [unavailableSeats, setUnavailableSeats] = useState([]);
   // 48 seats per theatre
   const seats = [];
   for (let i = 0; i < 48; i++) {
     seats.push(i + 1);
   }
+
+  useEffect(() => {
+    getUnavailableSeats();
+  }, []);
+
+  const getUnavailableSeats = () => {
+    const showtime_id = showtime.id;
+    axios
+      .get(`http://localhost:8080/api/v1/ticket/seats/by/${showtime_id}`, {})
+      .then((response) => {
+        console.log(response);
+        setUnavailableSeats(response.data);
+      })
+      .catch((response) => {
+        alert(response.response.data.message);
+      });
+  };
+
   // handle selecting seats -> add/remove seat from selectedSeats
   const clickSeat = (seat) => {
     console.log("seat clicked", seat);

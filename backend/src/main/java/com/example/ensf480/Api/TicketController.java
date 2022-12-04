@@ -39,8 +39,8 @@ public class TicketController {
     }
 
     @GetMapping(path = "/seats/by/{showtime_id}")
-    public List<Integer> getSeatsByShowtime(@PathVariable("showtime_id") UUID showtime_id) {
-        return ticketService.getSeatsByShowtime(showtime_id);
+    public List<Integer> getSeatsByShowtime(@PathVariable("showtime_id") String showtime_id) {
+        return ticketService.getSeatsByShowtime(UUID.fromString(showtime_id));
     }
 
 }
