@@ -1,6 +1,7 @@
 package com.example.ensf480.Service;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,8 +23,9 @@ public class TicketService {
         return ticketDao.createTicket(ticket);
     }
 
-    public void deleteTicket(Map<String, Object> ticketMap) {
-        String id = (String) ticketMap.get("id");
-        ticketDao.deleteTicket(id);
+    public String deleteTicket(Map<String, Object> ticketMap) {
+        String id = (String) ticketMap.get("ticketNo");
+        Boolean isRu = (Boolean) ticketMap.get("isRu");
+        return ticketDao.deleteTicket(id, isRu);
     }
 }

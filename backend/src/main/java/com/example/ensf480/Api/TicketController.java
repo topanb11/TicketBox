@@ -1,8 +1,11 @@
 package com.example.ensf480.Api;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +26,14 @@ public class TicketController {
 
     @PostMapping(path = "create")
     public Ticket createTicket(@RequestBody Ticket ticket) {
+        System.out.println("Creating ticket");
         return ticketService.createTicket(ticket);
     }
 
-    @PostMapping(path = "delete")
-    public void deleteTicket(@RequestBody Map<String, Object> ticketMap) {
-        ticketService.deleteTicket(ticketMap);
+    @DeleteMapping(path = "/delete")
+    public String deleteTicket(@RequestBody Map<String, Object> ticketMap) {
+        System.out.println("hello");
+        return ticketService.deleteTicket(ticketMap);
     }
 
 }
