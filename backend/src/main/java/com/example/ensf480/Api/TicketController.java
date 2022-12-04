@@ -26,13 +26,11 @@ public class TicketController {
 
     @PostMapping(path = "create")
     public Ticket createTicket(@RequestBody Ticket ticket) {
-        System.out.println("Creating ticket");
         return ticketService.createTicket(ticket);
     }
 
     @DeleteMapping(path = "/delete")
     public String deleteTicket(@RequestBody Map<String, Object> ticketMap) {
-        System.out.println("hello");
         return ticketService.deleteTicket(ticketMap);
     }
 
