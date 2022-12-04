@@ -1,4 +1,4 @@
-package com.example.ensf480.User.Dao;
+package com.example.ensf480.Dao;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.ensf480.User.Model.RegisteredUser;
+import com.example.ensf480.Model.RegisteredUser;
 
 @Repository("Postgres")
 public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
-
 
     private final JdbcTemplate jdbcTemplate;
     private final String INSERT_QUERY = "INSERT INTO ru (id, firstName, lastName, email, password, address, creditCardNumber, creditCardExpirationDate, ccv, validUntil) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -29,11 +28,14 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
         try {
             date = new SimpleDateFormat("dd/MM/yyyy").parse(person.getValidUntil());
             Timestamp validUntilTimestamp = new Timestamp(date.getTime());
-            jdbcTemplate.update(INSERT_QUERY, new Object[] {person.getId(), person.getFirstName(), person.getLastName(), person.getEmail(), person.getPassword(), person.getAddress(), person.getCreditCardNumber(), person.getExpiryDate(), person.getCcv(), validUntilTimestamp});    
+            jdbcTemplate.update(INSERT_QUERY,
+                    new Object[] { person.getId(), person.getFirstName(), person.getLastName(), person.getEmail(),
+                            person.getPassword(), person.getAddress(), person.getCreditCardNumber(),
+                            person.getExpiryDate(), person.getCcv(), validUntilTimestamp });
         } catch (ParseException e) {
             e.printStackTrace();
-        } 
-       
+        }
+
         return person;
     }
 
@@ -42,5 +44,5 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
         // TODO Auto-generated method stub
         return 0;
     }
-    
+
 }

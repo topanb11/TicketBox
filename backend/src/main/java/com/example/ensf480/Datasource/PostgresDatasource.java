@@ -1,4 +1,4 @@
-package com.example.ensf480.User.Datasource;
+package com.example.ensf480.Datasource;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;

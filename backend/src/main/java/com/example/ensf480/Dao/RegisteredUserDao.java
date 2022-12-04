@@ -1,6 +1,6 @@
-package com.example.ensf480.User.Dao;
+package com.example.ensf480.Dao;
 
-import com.example.ensf480.User.Model.RegisteredUser;
+import com.example.ensf480.Model.RegisteredUser;
 
 public interface RegisteredUserDao {
     RegisteredUser insertPerson(RegisteredUser person);
