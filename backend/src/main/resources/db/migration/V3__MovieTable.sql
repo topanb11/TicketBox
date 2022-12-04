@@ -1,0 +1,4 @@
+CREATE TABLE movie (
+    id UUID NOT NULL PRIMARY KEY,
+    movieName VARCHAR(255) NOT NULL,
+);
