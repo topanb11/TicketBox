@@ -9,6 +9,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import axios from "axios";
 
 const Wrapper = styled("div")({
   width: "100%",
@@ -59,12 +60,9 @@ const LogIn = () => {
   const [password, setPassword] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
-
-  const { user, setUser } = useContext(UserContext);
+	const { user, setUser } = useContext(UserContext);
 
   const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-  const isRU = true; // replace with API data
-  const validRU = false; // replace with API data
 
   const continueAsGuest = () => {
     setDialogOpen(false);
@@ -98,15 +96,24 @@ const LogIn = () => {
   };
 
   const handleSubmit = () => {
-    const data = {
-      email,
-      password,
-    };
-    console.log(data);
-
-    if (isRU && !validRU) {
-      setDialogOpen(true);
-    }
+		axios.post("http://localhost:8080/api/v1/user/login", {
+			email: email,
+			password: password
+		})
+		.then(response => {
+			alert("Login Successful!");
+			setUser(response.data);
+			const currentDate = new Date();
+			const receivedDate = new Date(response.data.validUntil);
+			const isRU = true;
+			const validRU = (receivedDate.getTime() > currentDate.getTime()) ? true : false;
+			if (isRU && !validRU) {
+				setDialogOpen(true);
+			}
+		})
+		.catch(response => {
+			alert(response.response.data.message);
+		})
   };
 
   return (
