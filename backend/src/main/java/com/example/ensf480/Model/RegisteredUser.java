@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RegisteredUser {
     private final UUID id;
-    private final String fprivat
-     final String lastName;
+    private final String firstName;
+    private final String lastName;
     private final String email;
     private final String password;
     private final String address;
