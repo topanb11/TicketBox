@@ -73,7 +73,7 @@ const MovieItem = ({ data, title }) => {
 
   const handleClick = (id, name) => {
     console.log("movie page", id, name, time);
-		navigate("/seatselection", {state: {moveID: id, movieTitle: name, showtime: time}});
+		navigate("/seatselection", {state: {id: id, title: name, showtime: time}});
   };
 
   return (
@@ -89,6 +89,7 @@ const MovieItem = ({ data, title }) => {
                 <ShowtimeText>Showtimes</ShowtimeText>
                 <FormControl sx={DropdownMenuStyle} size="small">
                   <Select value={time} onChange={handleTimeChange}>
+										{/* \==== ADD SHOWTIMES API CALL LATER ====| */}
                     {/* {data.times.map((times) => (
                       <MenuItem key={times} value={times}>
                         {times}
@@ -98,7 +99,7 @@ const MovieItem = ({ data, title }) => {
                 </FormControl>
                 <ViewSeatsButton
                   variant="contained"
-                  onClick={() => handleClick(data.movieID, data.name)}
+                  onClick={() => handleClick(data.id, data.name)}
                 >
                   VIEW SEATS
                 </ViewSeatsButton>
