@@ -1,4 +1,4 @@
-package com.example.ensf480.User.Dao;
+package main.java.com.example.ensf480.User.Dao;
 
 import java.sql.Timestamp;
 import java.text.ParseException;

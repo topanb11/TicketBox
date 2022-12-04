@@ -6,7 +6,7 @@ public class Movie {
     private final UUID id;
     private String movieName;
 
-    public Movie(UUID id, String movieName) {
+    public Movie(int id, String movieName) {
         this.id = UUID.randomUUID();
         this.movieName = movieName;
     }
