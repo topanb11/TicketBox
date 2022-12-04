@@ -4,3 +4,6 @@ app:
     username: postgres
     password: admin
     pool-size: 30
+server:
+  error:
+    include-message: always

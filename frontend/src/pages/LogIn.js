@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import NavBar from "../components/NavBar";
 import { styled } from "@mui/system";
 import Logo from "../assets/logo.svg";
@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const Wrapper = styled("div")({
   width: "100%",
@@ -58,6 +59,8 @@ const LogIn = () => {
   const [password, setPassword] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
+
+  const { user, setUser } = useContext(UserContext);
 
   const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
   const isRU = true; // replace with API data
