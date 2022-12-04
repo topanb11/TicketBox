@@ -22,9 +22,9 @@ public class RegisteredUserService {
         return userDao.insertPerson(person);
     }
 
-    public double checkCredentials(Map<String, Object> userMap) {
+    public RegisteredUser login(Map<String, Object> userMap) {
         String email = (String) userMap.get("email");
         String password = (String) userMap.get("password");
-        return userDao.checkCredentials(email, password);
+        return userDao.login(email, password);
     }
 }
