@@ -1,4 +1,4 @@
-package main.java.com.example.ensf480.User.Dao;
+package com.example.ensf480.User.Dao;
 
 import com.example.ensf480.User.Model.RegisteredUser;
 

@@ -1,24 +1,29 @@
-package main.java.com.example.ensf480.Movie.Api;
+package com.example.ensf480.Movie.Api;
 
-import main.java.com.example.ensf480.Movie.Model.Movie;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.ensf480.Movie.Model.Movie;
+import com.example.ensf480.Movie.Service.MovieService;
 
 @RequestMapping("api/v1/movie")
 @RestController
 public class MovieController {
 
-    @GetMapping("all")
-    public List<Movie> getMovies() {
-        return List.of(
-                new Movie(
-                 5,
-                 "Black Panther"
-                )
-        );
-    }
+	private final MovieService movieService;
+
+	@Autowired
+	public MovieController(MovieService movieService) {
+		this.movieService = movieService;
+	}
+
+	@GetMapping("/all")
+	public List<Movie> getAllMovie() {
+		return movieService.getAllMovie();
+	}
 
 }
