@@ -1,6 +1,0 @@
-CREATE TABLE showtime (
-    id UUID NOT NULL PRIMARY KEY,
-    movieID VARCHAR(255) NOT NULL,
-    showroom INTEGER NOT NULL,
-		showtime TIMESTAMP NOT NULL
-);
