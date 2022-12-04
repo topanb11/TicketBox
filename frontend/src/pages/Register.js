@@ -5,6 +5,7 @@ import { styled } from "@mui/system";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { UserContext } from "../context/UserContext";
+import axios from "axios";
 const Wrapper = styled("div")({
   width: "100%",
   display: "flex",
@@ -42,6 +43,15 @@ const Body = styled("div")({
   textAlign: "center",
 });
 
+const Error = styled("div")({
+  fontFamily: "Roboto, sans-serif",
+  color: "red",
+  fontWeight: "400",
+  fontSize: "14px",
+  width: "100%",
+  textAlign: "center",
+});
+
 const Register = () => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
@@ -54,6 +64,7 @@ const Register = () => {
   const [ccNo, setCCNo] = useState("");
   const [ccv, setCCV] = useState("");
   const [expDate, setExpDate] = useState("");
+  const [errMessage, setErrMessage] = useState();
 
   const validForm = () => {
     const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -76,14 +87,20 @@ const Register = () => {
       firstName,
       lastName,
       address,
-      ccNo,
+      creditCardNumber: ccNo,
       ccv,
-      expDate,
+      expiryDate: expDate,
     };
     console.log(data);
-    // Axios.post("http://localhost:3001/create-user", data).then((res) => {
-    //   console.log(res);
-    // });
+    axios
+      .post("http://localhost:8080/api/v1/user/create", data)
+      .then((res) => {
+        setUser(res.data);
+        navigate("/");
+      })
+      .catch(function (error) {
+        setErrMessage(error.response.data.message);
+      });
   };
 
   const handleCCInput = (event) => {
@@ -181,6 +198,7 @@ const Register = () => {
           >
             REGISTER
           </SubmitButton>
+          {errMessage != "" && <Error>{errMessage}</Error>}
           <Body>NOTE: You will be charged $9.99 anually </Body>
         </FormContainer>
       </Wrapper>

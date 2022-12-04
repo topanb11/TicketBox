@@ -36,12 +36,16 @@ const NavBar = (props) => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
 
+  const handleLogout = () => {
+    setUser(null);
+  };
+
   if (user) {
     return (
       <Container>
         <Icon src={Logo} width="75px" onClick={() => navigate("/")}></Icon>
         <TextContainer>
-          <NavButton variant="text" onClick={() => setUser(null)}>
+          <NavButton disableRipple variant="text" onClick={handleLogout}>
             Log Out
           </NavButton>
         </TextContainer>
