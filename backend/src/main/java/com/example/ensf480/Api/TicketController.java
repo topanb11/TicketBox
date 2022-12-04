@@ -1,11 +1,13 @@
 package com.example.ensf480.Api;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +36,11 @@ public class TicketController {
     @DeleteMapping(path = "/delete")
     public String deleteTicket(@RequestBody Map<String, Object> ticketMap) {
         return ticketService.deleteTicket(ticketMap);
+    }
+
+    @GetMapping(path = "/seats/by/{showtime_id}")
+    public List<Integer> getSeatsByShowtime(@PathVariable("showtime_id") UUID showtime_id) {
+        return ticketService.getSeatsByShowtime(showtime_id);
     }
 
 }

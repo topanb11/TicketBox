@@ -1,5 +1,6 @@
 package com.example.ensf480.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,5 +28,9 @@ public class TicketService {
         String id = (String) ticketMap.get("ticketNo");
         Boolean isRu = (Boolean) ticketMap.get("isRu");
         return ticketDao.deleteTicket(id, isRu);
+    }
+
+    public List<Integer> getSeatsByShowtime(UUID showtime_id) {
+        return ticketDao.getSeatsByShowtime(showtime_id);
     }
 }
