@@ -117,7 +117,7 @@ const Home = () => {
 
 	useEffect(() => {
 		axios.get("http://localhost:8080/api/v1/movie/all")
-			.then(function (response) {
+			.then((response) => {
 				setMovies(response.data);
 			})
 	}, []);
