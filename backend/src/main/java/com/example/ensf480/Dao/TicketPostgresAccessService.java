@@ -1,9 +1,12 @@
 package com.example.ensf480.Dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.example.ensf480.Model.Ticket;
@@ -14,6 +17,7 @@ public class TicketPostgresAccessService implements TicketDao {
     private final JdbcTemplate jdbcTemplate;
     private final String INSERT_QUERY = "INSERT INTO ticket (id, showtimeId, seatNo, buyerEmail, ruFlag) VALUES (?, ?, ?, ?, ?)";
     private final String DELETE_QUERY = "DELETE FROM ticket WHERE id = ?";
+    private final String GET_SEATS_BY_SHOWTIME = "SELECT seatNo FROM ticket WHERE showtimeId = ?";
 
     @Autowired
     public TicketPostgresAccessService(JdbcTemplate jdbcTemplate) {
@@ -49,6 +53,15 @@ public class TicketPostgresAccessService implements TicketDao {
             return "Successfuly refunded ticket with a 15% refund fee.";
         }
         return "Could not find ticket.";
+    }
+
+    @Override
+    public List<Integer> getSeatsByShowtime(UUID showtime_id) {
+        List<Integer> result = jdbcTemplate.queryForList(GET_SEATS_BY_SHOWTIME, Integer.class, showtime_id.toString());
+        if (result.size() == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tickets found for showtime.");
+        }
+        return result;
     }
 
 }
