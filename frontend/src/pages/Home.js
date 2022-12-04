@@ -101,8 +101,15 @@ const Home = () => {
   };
 
   const handleCancelSubmit = () => {
-    console.log(ticketNo);
-    setTicketNo("");
+		var isRu = false;
+		if (user !== null) {
+			isRu = true;
+		}
+		axios.delete("http://localhost:8080/api/v1/ticket/delete", {data:{
+			ticketNo: ticketNo,
+			isRu: isRu
+			}
+		});
   };
 
 	useEffect(() => {
@@ -140,11 +147,12 @@ const Home = () => {
             id="ticketNo"
             onChange={handleChange}
             value={ticketNo}
+						inputProps={{ maxLength: 36 }}
           ></TextField>
           <CancelButton
             variant="outlined"
             onClick={handleCancelSubmit}
-            disabled={ticketNo.trim() == ""}
+            disabled={ticketNo.trim() == "" || ticketNo.length != 36}
           >
             CANCEL TICKET
           </CancelButton>
