@@ -1,3 +1,4 @@
+import { useState, useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@emotion/react";
@@ -6,6 +7,7 @@ import Register from "./pages/Register";
 import LogIn from "./pages/LogIn";
 import MoviePage from "./pages/MoviePage";
 import SeatSelection from "./pages/SeatSelection";
+import { UserContext } from "./context/UserContext";
 
 const theme = createTheme({
   palette: {
@@ -16,17 +18,23 @@ const theme = createTheme({
 });
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  const contextValue = useMemo(() => ({ user, setUser }), [user, setUser]);
+
   return (
     <ThemeProvider theme={theme}>
       <div>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<LogIn />} />
-						<Route path="/movies" element={<MoviePage />}/>
-            <Route path="/seatselection" element={<SeatSelection />} />
-          </Routes>
+          <UserContext.Provider value={contextValue}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<LogIn />} />
+              <Route path="/movies" element={<MoviePage />} />
+              <Route path="/seatselection" element={<SeatSelection />} />
+            </Routes>
+          </UserContext.Provider>
         </BrowserRouter>
       </div>
     </ThemeProvider>

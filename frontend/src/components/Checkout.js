@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { styled } from "@mui/system";
 import { Button, Grid, TextField } from "@mui/material";
+import { UserContext } from "../context/UserContext";
 
 const SubTitle = styled("div")({
   fontFamily: "Roboto, sans-serif",
@@ -31,7 +32,7 @@ const Wrapper = styled("div")({
 });
 
 const Checkout = (props) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { user, setUser } = useContext(UserContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -44,7 +45,7 @@ const Checkout = (props) => {
 
   const validForm = () => {
     const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    if (loggedIn) {
+    if (user) {
       return count !== 0;
     }
     return (
@@ -60,7 +61,7 @@ const Checkout = (props) => {
   };
 
   const handleSubmit = () => {
-    if (loggedIn) {
+    if (user) {
       var data = {
         total: 17.5 * count,
         selectedSeats: props.seats,
@@ -102,7 +103,7 @@ const Checkout = (props) => {
     }
   };
 
-  if (loggedIn) {
+  if (user) {
     return (
       <div
         style={{
