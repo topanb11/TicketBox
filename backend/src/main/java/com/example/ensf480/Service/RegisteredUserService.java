@@ -27,4 +27,9 @@ public class RegisteredUserService {
         String password = (String) userMap.get("password");
         return userDao.login(email, password);
     }
+
+    public RegisteredUser reactivate(Map<String, Object> userMap) {
+        String id = (String) userMap.get("id");
+        return userDao.reactivate(id);
+    }
 }

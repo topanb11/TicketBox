@@ -7,4 +7,6 @@ public interface RegisteredUserDao {
 
     RegisteredUser login(String email, String password);
 
+    RegisteredUser reactivate(String id);
+
 }
