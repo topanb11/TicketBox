@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
-import data from "./TestData";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -62,11 +61,10 @@ const DropdownMenuStyle = {
   height: "50px",
 };
 
-const MovieItem = ({ title }) => {
+const MovieItem = ({ data, title }) => {
 	const navigate = useNavigate();
   const [time, setTime] = useState(0);
   const [movies, setMovies] = useState([]);
-  const [search, setSearch] = useState([]);
 
   const handleTimeChange = (event) => {
     console.log(event.target.value);
@@ -75,13 +73,13 @@ const MovieItem = ({ title }) => {
 
   const handleClick = (id, name) => {
     console.log("movie page", id, name, time);
-		navigate("/seatselection", {state: {moveID: id, movieTitle: name, showtime: time}});
+		navigate("/seatselection", {state: {id: id, title: name, showtime: time}});
   };
 
   return (
     <>
       <MovieListContainer>
-        {data.movies
+        {data
           .filter((data) => data.name.toLowerCase().includes(title))
           .map((data) => (
             <MovieListItem key={data.movieID}>
@@ -91,16 +89,17 @@ const MovieItem = ({ title }) => {
                 <ShowtimeText>Showtimes</ShowtimeText>
                 <FormControl sx={DropdownMenuStyle} size="small">
                   <Select value={time} onChange={handleTimeChange}>
-                    {data.times.map((times) => (
+										{/* \==== ADD SHOWTIMES API CALL LATER ====| */}
+                    {/* {data.times.map((times) => (
                       <MenuItem key={times} value={times}>
                         {times}
                       </MenuItem>
-                    ))}
+                    ))} */}
                   </Select>
                 </FormControl>
                 <ViewSeatsButton
                   variant="contained"
-                  onClick={() => handleClick(data.movieID, data.name)}
+                  onClick={() => handleClick(data.id, data.name)}
                 >
                   VIEW SEATS
                 </ViewSeatsButton>
