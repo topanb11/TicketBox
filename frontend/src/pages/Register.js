@@ -91,7 +91,6 @@ const Register = () => {
       ccv,
       expiryDate: expDate,
     };
-    console.log(data);
     axios
       .post("http://localhost:8080/api/v1/user/create", data)
       .then((res) => {

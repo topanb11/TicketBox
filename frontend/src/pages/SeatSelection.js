@@ -8,6 +8,7 @@ import Legend from "../components/Legend";
 import Checkout from "../components/Checkout.js";
 import { UserContext } from "../context/UserContext.js";
 import axios from "axios";
+import moment from "moment";
 
 const Wrapper = styled("div")({
   display: "flex",
@@ -50,18 +51,6 @@ const SeatContainer = styled(Grid)({
   padding: "0 10% 5% 10%",
 });
 
-const movie = {
-  id: "0df2909f-813c-424f-a774-fa7df72cffe4",
-  name: "Men in Black",
-  cover:
-    "https://m.media-amazon.com/images/M/MV5BOTlhYTVkMDktYzIyNC00NzlkLTlmN2ItOGEyMWQ4OTA2NDdmXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg",
-};
-
-const showtime = {
-  id: "0df2909f-813c-424f-a774-fa7df72cfd12",
-  timestamp: "2023-12-04 19:00:00.814",
-};
-
 const SeatSelection = () => {
   // Object that has movie attributes
   const location = useLocation();
@@ -79,32 +68,34 @@ const SeatSelection = () => {
   }, []);
 
   const getUnavailableSeats = () => {
-    const showtime_id = showtime.id;
+    const showtime_id = location.state.movie["selectedShowtime"]["showtimeId"];
     axios
       .get(`http://localhost:8080/api/v1/ticket/seats/by/${showtime_id}`, {})
       .then((response) => {
-        console.log(response);
         setUnavailableSeats(response.data);
       })
       .catch((response) => {
-        alert(response.response.data.message);
+        alert("Failed to get purchased seats", response.response.data.message);
       });
   };
 
   // handle selecting seats -> add/remove seat from selectedSeats
   const clickSeat = (seat) => {
-    console.log("seat clicked", seat);
     if (selectedSeats.includes(seat)) {
-      console.log("removing");
       // remove seat from selection
       const updatedSeats = selectedSeats.filter((s) => s !== seat);
       setSelectedSeats(updatedSeats);
     } else {
-      console.log("adding");
       // add seat to selection
       const updatedSeats = [...selectedSeats, seat];
       setSelectedSeats(updatedSeats);
     }
+  };
+
+  const convertTime = (time) => {
+    let unixtime = Date.parse(time);
+    unixtime /= 1000;
+    return moment.unix(unixtime).format("MMM Do YYYY, h:mm A");
   };
 
   // check state of seat (available, unavailable, selected) and pass in correct value to Seat component
@@ -134,8 +125,10 @@ const SeatSelection = () => {
     <>
       <NavBar></NavBar>
       <Wrapper>
-        <Title>{location.state.title}</Title>
-        <Body>{location.state.showtime} PM</Body>
+        <Title>{location.state.movie.name}</Title>
+        <Body>
+          {convertTime(location.state.movie.selectedShowtime.timestamp)}
+        </Body>
         <TheatreContainer>
           <Screen>SCREEN</Screen>
           <SeatContainer container spacing={2}>
@@ -143,7 +136,10 @@ const SeatSelection = () => {
           </SeatContainer>
           <Legend></Legend>
         </TheatreContainer>
-        <Checkout seats={selectedSeats}></Checkout>
+        <Checkout
+          seats={selectedSeats}
+          showtimeId={location.state.movie["selectedShowtime"]["showtimeId"]}
+        ></Checkout>
       </Wrapper>
     </>
   );

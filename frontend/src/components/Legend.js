@@ -50,7 +50,7 @@ const Legend = () => {
             border: "#E16138 1px solid",
           }}
         ></Box>
-        <Body>Unavailable</Body>
+        <Body>Available</Body>
       </SubContainer>
     </Container>
   );

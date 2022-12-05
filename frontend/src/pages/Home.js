@@ -6,6 +6,7 @@ import Logo from "../assets/logo.png";
 import Icon from "../assets/Saly-1.png";
 import { alertClasses, Button, TextField } from "@mui/material";
 import { UserContext } from "../context/UserContext.js";
+import { MoviesContext } from "../context/MoviesContext.js";
 import axios from "axios";
 
 const Page = styled("div")({
@@ -76,16 +77,14 @@ const CancelSubContainer = styled("div")({
   display: "flex",
   gap: "20px",
   textAlign: "center",
-});	
-
-
+});
 
 const Home = () => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [ticketNo, setTicketNo] = useState("");
-	const [movies, setMovies] = useState([]);
   const { user, setUser } = useContext(UserContext);
+  const { movies, setMovies } = useContext(MoviesContext);
 
   const handleChange = (event) => {
     if (event.target.id == "search") {
@@ -97,30 +96,39 @@ const Home = () => {
   };
 
   const handleSearchSubmit = () => {
-    navigate("/movies", { state: { name: search, movies: movies } });
+    navigate("/movies", {
+      state: {
+        search: search,
+      },
+    });
   };
 
   const handleCancelSubmit = () => {
-		var isRu = false;
-		if (user == null) {
-			isRu = true;
-		}
-		axios.delete("http://localhost:8080/api/v1/ticket/delete", {data:{
-			ticketNo: ticketNo,
-			isRu: isRu
-			}
-		})
-		.then( response => {
-			alert(response.data);
-			});
+    var isRu = false;
+    if (user == null) {
+      isRu = true;
+    }
+    axios
+      .delete("http://localhost:8080/api/v1/ticket/delete", {
+        data: {
+          ticketNo: ticketNo,
+          isRu: isRu,
+        },
+      })
+      .then((response) => {
+        alert(response.data);
+      });
   };
 
-	useEffect(() => {
-		axios.get("http://localhost:8080/api/v1/movie/all")
-			.then((response) => {
-				setMovies(response.data);
-			})
-		}, []);
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/v1/movie/all").then((response) => {
+      let movies = response.data;
+      for (let i = 0; i < movies.length; i++) {
+        movies[i]["selectedShowtime"] = movies[i].showtimes[0];
+      }
+      setMovies(movies);
+    });
+  }, []);
 
   return (
     <Page>
@@ -150,7 +158,7 @@ const Home = () => {
             id="ticketNo"
             onChange={handleChange}
             value={ticketNo}
-						inputProps={{ maxLength: 36 }}
+            inputProps={{ maxLength: 36 }}
           ></TextField>
           <CancelButton
             variant="outlined"
