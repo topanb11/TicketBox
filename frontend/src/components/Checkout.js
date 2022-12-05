@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import { Button, Grid, TextField } from "@mui/material";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const SubTitle = styled("div")({
   fontFamily: "Roboto, sans-serif",
@@ -41,9 +42,9 @@ const Checkout = (props) => {
   const [ccNo, setCCNo] = useState("");
   const [ccv, setCCV] = useState("");
   const [expDate, setExpDate] = useState("");
-
+  const navigate = useNavigate();
   const count = props.seats.length;
-	const showtimeId = props.showtimeId;
+  const showtimeId = props.showtimeId;
 
   const validForm = () => {
     const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -63,31 +64,41 @@ const Checkout = (props) => {
   };
 
   const handleSubmit = () => {
-		if (user) {
-			axios.post("http://localhost:8080/api/v1/ticket/checkout/ru", {
-				showtimeId: showtimeId,
-				buyerEmail: user.email,
-				seats: props.seats,
-			})
-			.then(alert("Tickets successfuly purchased!"))
-			.catch(response => console.log(response))
-
-		} else {
-			axios.post("http://localhost:8080/api/v1/ticket/checkout/guest", {
-				showtimeId: showtimeId,
-				buyerEmail: email,
-				seats: props.seats,
-				firstName: firstName,
-				lastName: lastName,
-				ccv: ccv,
-				cardNumber: ccNo,
-				expiryDate: expDate,
-				address: address,
-				selectedSeats: props.seats
-			})
-			.then(alert("Ticket successfuly purchased!"))
-			.catch(response => console.log(response));
-		}
+    if (user) {
+      axios
+        .post("http://localhost:8080/api/v1/ticket/checkout/ru", {
+          showtimeId: showtimeId,
+          buyerEmail: user.email,
+          seats: props.seats,
+        })
+        .then(() => {
+          alert("Tickets successfuly purchased!");
+          navigate("/");
+        })
+        .catch((response) => console.log(response));
+    } else {
+      axios
+        .post("http://localhost:8080/api/v1/ticket/checkout/guest", {
+          showtimeId: showtimeId,
+          buyerEmail: email,
+          seats: props.seats,
+          firstName: firstName,
+          lastName: lastName,
+          ccv: ccv,
+          cardNumber: ccNo,
+          expiryDate: expDate,
+          address: address,
+          selectedSeats: props.seats,
+        })
+        .then(() => {
+          alert("Ticket successfuly purchased!");
+          navigate("/");
+        })
+        .catch((response) => {
+          alert(response.response.data.message);
+          console.log(response);
+        });
+    }
   };
 
   const handleCCInput = (event) => {
