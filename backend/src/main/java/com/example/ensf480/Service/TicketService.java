@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -68,10 +70,20 @@ public class TicketService {
 
         Receipt receipt = new Receipt(ticketNos);
         Payment payment = new Payment(paymentStrategy, user.getCreditCardNumber(), user.getCcv(), user.getExpiryDate());
-        if (payment.processPayment(receipt.getTotal())) {
+        String paymentResult = payment.processPayment(receipt.getTotal());
+        if (paymentResult == "Success") {
+            // Payment was successful -> send confirmation email
             System.out.println("Payment successful");
             EmailApiSingleton emailApiService = EmailApiSingleton.getOnlyInstance();
             emailApiService.sendConfirmationEmail(user.getEmail(), receipt);
+        } else {
+            // Payment failed, need to delete created tickets
+            for (Ticket t : ticketNos) {
+                System.out.println("deleting " + t.getSeatNo());
+                ticketDao.cancelPendingTicket(t.getId().toString());
+                System.out.println("successfuly deleted " + t.getSeatNo());
+            }
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, paymentResult);
         }
 
         return ticketNos;

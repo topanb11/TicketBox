@@ -26,8 +26,14 @@ public class Payment {
     }
 
     public boolean validExpDate(String expDate) {
+        String monthStr = expDate.substring(0, 2);
+        int month = Integer.parseInt(monthStr);
+        if (month < 1 || month > 12) {
+            return false;
+        }
         try {
             Date expirationDate = new SimpleDateFormat("MMyy").parse(expDate);
+            System.out.println("expirationDate: " + expirationDate.getTime());
             Date currentDate = new Date();
             if (expirationDate.after(currentDate)) {
                 return true;
@@ -39,13 +45,13 @@ public class Payment {
         }
     }
 
-    public Boolean processPayment(double amount) {
+    public String processPayment(double amount) {
         if (!validExpDate(expDate)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Expiry Date");
+            return "Invalid Expiry Date";
         }
         if (!paymentStrategy.processPayment(amount)) {
-            return false;
+            return "Could not process payment. Please check card details and try again.";
         }
-        return true;
+        return "Success";
     }
 }

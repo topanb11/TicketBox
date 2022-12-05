@@ -36,7 +36,7 @@ public class TicketPostgresAccessService implements TicketDao {
     @Override
     public Ticket createTicket(Ticket ticket) {
         UUID showTimeId = UUID.fromString(ticket.getShowtimeId());
-        
+
         Integer count = jdbcTemplate.queryForObject(GET_SHOWTIME_COUNT, Integer.class, showTimeId);
 
         if (count == 0) {
@@ -120,4 +120,11 @@ public class TicketPostgresAccessService implements TicketDao {
         List<Integer> result = jdbcTemplate.queryForList(GET_SEATS_BY_SHOWTIME, Integer.class, showtime_id.toString());
         return result;
     }
+
+    @Override
+    public void cancelPendingTicket(String id) {
+        Object[] args = new Object[] { UUID.fromString(id) };
+        jdbcTemplate.update(DELETE_QUERY, args);
+    }
+
 }
