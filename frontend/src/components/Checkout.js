@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { styled } from "@mui/system";
 import { Button, Grid, TextField } from "@mui/material";
 import { UserContext } from "../context/UserContext";
+import axios from "axios";
 
 const SubTitle = styled("div")({
   fontFamily: "Roboto, sans-serif",
@@ -42,6 +43,7 @@ const Checkout = (props) => {
   const [expDate, setExpDate] = useState("");
 
   const count = props.seats.length;
+	const showtimeId = props.showtimeId;
 
   const validForm = () => {
     const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -61,25 +63,32 @@ const Checkout = (props) => {
   };
 
   const handleSubmit = () => {
-    if (user) {
-      var data = {
-        total: 17.5 * count,
-        selectedSeats: props.seats,
-      };
-    } else {
-      var data = {
-        firstName,
-        lastName,
-        email,
-        address,
-        ccNo,
-        ccv,
-        expDate,
-        total: 17.5 * count,
-        selectedSeats: props.seats,
-      };
-    }
-    console.log(data);
+		if (user) {
+			axios.post("http://localhost:8080/api/v1/ticket/checkout/ru", {
+				showtimeId: showtimeId,
+				buyerEmail: user.email,
+				seats: props.seats,
+			})
+			.then(alert("Tickets successfuly purchased!"))
+			.catch(response => console.log(response))
+
+		} else {
+			axios.post("http://localhost:8080/api/v1/ticket/checkout/guest", {
+				showtimeId: showtimeId,
+				buyerEmail: email,
+				seats: props.seats,
+				firstName: firstName,
+				lastName: lastName,
+				ccv: ccv,
+				cardNumber: ccNo,
+				expiryDate: expDate,
+				address: address,
+				selectedSeats: props.seats
+			})
+			.then(alert("Ticket successfuly purchased!"))
+			.catch(response => console.log(response));
+
+		}
   };
 
   const handleCCInput = (event) => {

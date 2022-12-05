@@ -86,7 +86,7 @@ const MovieItem = ({ data, title }) => {
 			{
 				movieID: id, 
 				title: name, 
-				showtime: {time: time, showtimeID: showtimeID}
+				showtime: {time: time, showtimeId: showtimeID}
 			}});
   };
 
