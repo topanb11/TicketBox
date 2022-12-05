@@ -68,7 +68,7 @@ public class TicketController {
     public List<Ticket> checkoutGuest(@RequestBody Map<String, Object> ticketMap) {
         String showtimeId = (String) ticketMap.get("showtimeId");
         String buyerEmail = (String) ticketMap.get("buyerEmail");
-        List<Integer> seats = List.of((Integer[]) ticketMap.get("seats"));
+        List<Integer> seats = (List<Integer>) ticketMap.get("seats");
 
         String firstName = (String) ticketMap.get("firstName");
         String lastName = (String) ticketMap.get("lastName");
