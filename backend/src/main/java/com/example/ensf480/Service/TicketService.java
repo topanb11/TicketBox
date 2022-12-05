@@ -13,6 +13,12 @@ import com.example.ensf480.Dao.TicketDao;
 import com.example.ensf480.Model.RegisteredUser;
 import com.example.ensf480.Model.Ticket;
 import com.example.ensf480.Model.User;
+import com.example.ensf480.Model.Payment.AmexPayment;
+import com.example.ensf480.Model.Payment.MastercardPayment;
+import com.example.ensf480.Model.Payment.Payment;
+import com.example.ensf480.Model.Payment.PaymentStrategy;
+import com.example.ensf480.Model.Payment.Receipt;
+import com.example.ensf480.Model.Payment.VisaPayment;
 
 @Service
 public class TicketService {
@@ -41,9 +47,31 @@ public class TicketService {
         List<Ticket> ticketNos = new ArrayList<Ticket>();
         Boolean isRu = user instanceof RegisteredUser;
 
+        // Amex starts with 3
+        // Visa starts with 4
+        // Mastercard starts with 5
+
         for (Integer seat : seats) {
             Ticket ticket = new Ticket(showtimeId, seat, user.getEmail(), isRu);
             ticketNos.add(ticketDao.createTicket(ticket));
+        }
+
+        PaymentStrategy paymentStrategy = null;
+
+        if (user.getCreditCardNumber().charAt(0) == '3') {
+            paymentStrategy = new AmexPayment();
+        } else if (user.getCreditCardNumber().charAt(0) == '4') {
+            paymentStrategy = new VisaPayment();
+        } else if (user.getCreditCardNumber().charAt(0) == '5') {
+            paymentStrategy = new MastercardPayment();
+        }
+
+        Receipt receipt = new Receipt(ticketNos);
+        Payment payment = new Payment(paymentStrategy, user.getCreditCardNumber(), user.getCcv(), user.getExpiryDate());
+        if(payment.processPayment(receipt.getTotal())) {
+            System.out.println("Payment successful");
+            EmailApiSingleton emailApiService = EmailApiSingleton.getOnlyInstance();
+            emailApiService.sendConfirmationEmail(user.getEmail(), receipt);
         }
 
         return ticketNos;
