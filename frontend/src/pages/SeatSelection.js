@@ -88,8 +88,18 @@ const SeatSelection = () => {
       setSelectedSeats(updatedSeats);
     } else {
       // add seat to selection
-      const updatedSeats = [...selectedSeats, seat];
-      setSelectedSeats(updatedSeats);
+
+      // if not presale -> select seat
+      if (!location.state.movie.selectedShowtime.presale) {
+        const updatedSeats = [...selectedSeats, seat];
+        setSelectedSeats(updatedSeats);
+      } else {
+        // if presale, make sure only 10% seats are selected/purchased
+        if (selectedSeats.length + unavailableSeats.length < 4) {
+          const updatedSeats = [...selectedSeats, seat];
+          setSelectedSeats(updatedSeats);
+        }
+      }
     }
   };
 
@@ -131,6 +141,9 @@ const SeatSelection = () => {
         <Body>
           {convertTime(location.state.movie.selectedShowtime.timestamp)}
         </Body>
+        {location.state.movie.selectedShowtime.presale ? (
+          <Body style={{ paddingTop: "1%", color: "#E16138" }}>Presale</Body>
+        ) : null}
         <TheatreContainer>
           <Screen>SCREEN</Screen>
           <SeatContainer container spacing={2}>
