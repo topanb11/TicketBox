@@ -22,29 +22,36 @@ import com.example.ensf480.Model.Payment.PaymentStrategy;
 import com.example.ensf480.Model.Payment.Receipt;
 import com.example.ensf480.Model.Payment.VisaPayment;
 
+// Ticket service class
 @Service
 public class TicketService {
+		// Instnace of TicketDao
     private final TicketDao ticketDao;
 
+		// Injection dependency
     @Autowired
     public TicketService(@Qualifier("postgresTicket") TicketDao ticketDao) {
         this.ticketDao = ticketDao;
     }
 
+		// Method to create Ticket
     public Ticket createTicket(Ticket ticket) {
         return ticketDao.createTicket(ticket);
     }
 
+		// Method to delete Ticket
     public String deleteTicket(Map<String, Object> ticketMap) {
         String id = (String) ticketMap.get("ticketNo");
         Boolean isRu = (Boolean) ticketMap.get("isRu");
         return ticketDao.deleteTicket(id, isRu);
     }
 
+		// Method to get seats by showtime
     public List<Integer> getSeatsByShowtime(UUID showtime_id) {
         return ticketDao.getSeatsByShowtime(showtime_id);
     }
 
+		// Checkout method
     public List<Ticket> checkout(List<Integer> seats, String showtimeId, User user) {
         List<Ticket> ticketNos = new ArrayList<Ticket>();
         Boolean isRu = user instanceof RegisteredUser;
