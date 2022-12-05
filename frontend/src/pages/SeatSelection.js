@@ -67,7 +67,7 @@ const SeatSelection = () => {
   for (let i = 0; i < 48; i++) {
     seats.push(i + 1);
   }
-	const showtimeId = location.state.showtime.showtimeId;
+  const showtimeId = location.state.showtime.showtimeId;
 
   useEffect(() => {
     getUnavailableSeats();
@@ -144,7 +144,10 @@ const SeatSelection = () => {
           </SeatContainer>
           <Legend></Legend>
         </TheatreContainer>
-        <Checkout seats={selectedSeats} showtimeId={location.state.showtime.showtimeId}></Checkout>
+        <Checkout
+          seats={selectedSeats}
+          showtimeId={location.state.movie.selectedShowtime.showtimeId}
+        ></Checkout>
       </Wrapper>
     </>
   );
