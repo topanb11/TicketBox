@@ -32,4 +32,27 @@ Start frontend: ```yarn start```
    2. ```mvn spring-boot:run```
 7. Server should now be started on localhost:8080
 
+## Screenshots
+<center>Home Page</center>
 
+![home page](screenshots/homepage.png)
+
+<center>Movies Page</center>
+
+![search](screenshots/searchresults.png)
+
+<center>Seat Selection</center>
+
+![seat selection](screenshots/seatselection.png)
+
+<center>Guest Checkout</center>
+
+![guest checkout](screenshots/guestcheckout.png)
+
+<center>Registration</center>
+
+![registration](screenshots/register.png)
+
+<center>Log In</center>
+
+![log in](screenshots/login.png)
