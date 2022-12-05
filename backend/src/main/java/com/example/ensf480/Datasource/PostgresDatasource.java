@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+// Function to instantiate Postgres object
 @Configuration
 public class PostgresDatasource {
 

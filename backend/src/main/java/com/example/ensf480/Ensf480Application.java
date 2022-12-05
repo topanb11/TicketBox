@@ -3,6 +3,9 @@ package com.example.ensf480;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * App Driver
+ */
 @SpringBootApplication
 public class Ensf480Application {
 
