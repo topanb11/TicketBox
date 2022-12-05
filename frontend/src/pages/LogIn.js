@@ -60,28 +60,32 @@ const LogIn = () => {
   const [password, setPassword] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
-	const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
-  const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i; // regex to make sure valid email is entered
 
+  // if user chooses not to reactivate account -> don't log them in and direct them back to home page
   const continueAsGuest = () => {
     setDialogOpen(false);
     setUser(null);
     navigate("/");
   };
 
+  // if user chooses to reactivate account -> make api call to process payment and reactivate account
   const reactivateAccount = () => {
     axios
-      .post("http://localhost:8080/api/v1/user/reactivate", {id: user.id})
-      .then( response => {
+      .post("http://localhost:8080/api/v1/user/reactivate", { id: user.id })
+      .then((response) => {
         setUser(response.data);
         navigate("/");
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error.response.data.message);
       });
   };
 
+  // render dialog notifying user their account is expired
+  // and prompting them to continue as guest or reactivate account
   const renderDialog = () => {
     return (
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
@@ -104,28 +108,35 @@ const LogIn = () => {
     );
   };
 
+  // handle log in by calling login api
   const handleSubmit = () => {
-		axios.post("http://localhost:8080/api/v1/user/login", {
-			email: email,
-			password: password
-		})
-		.then(response => {
-      setUser(response.data);
-      const currentDate = new Date();
-			const receivedDate = new Date(response.data.validUntil);
-			const isRU = true;
-			const validRU = (receivedDate.getTime() > currentDate.getTime()) ? true : false;
-			if (isRU && !validRU) {
-        setDialogOpen(true);
-      } else {
-        alert("Login Successful!");
-        setDialogOpen(false);
-        navigate("/");
-      }
-		})
-		.catch(response => {
-			alert(response.response.data.message);
-		})
+    axios
+      .post("http://localhost:8080/api/v1/user/login", {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        // set user context on successful login and check if account is expired before proceeding
+        // for an expired account, render reactivation dialog
+        setUser(response.data);
+        const currentDate = new Date();
+        const receivedDate = new Date(response.data.validUntil);
+        const isRU = true;
+        const validRU =
+          receivedDate.getTime() > currentDate.getTime() ? true : false; // compare validUntil propertuy with current date
+        if (isRU && !validRU) {
+          // account is expired -> render reactivation dialog
+          setDialogOpen(true);
+        } else {
+          // account is valid -> log user in
+          alert("Login Successful!");
+          setDialogOpen(false);
+          navigate("/");
+        }
+      })
+      .catch((response) => {
+        alert(response.response.data.message);
+      });
   };
 
   return (

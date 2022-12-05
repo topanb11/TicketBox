@@ -40,8 +40,7 @@ const Unavailable = styled("div")({
 });
 
 const Seat = (props) => {
-  const handleClick = () => {};
-
+  // render available seat
   if (props.state == "available") {
     return (
       <Available onClick={() => props.handleClick(props.seatNo)}>
@@ -49,6 +48,7 @@ const Seat = (props) => {
       </Available>
     );
   }
+  // render selected seat
   if (props.state == "selected") {
     return (
       <Selected onClick={() => props.handleClick(props.seatNo)}>
@@ -56,6 +56,7 @@ const Seat = (props) => {
       </Selected>
     );
   }
+  // render unavailable seat
   if (props.state == "unavailable") {
     return <Unavailable>{props.seatNo}</Unavailable>;
   }

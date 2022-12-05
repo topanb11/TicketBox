@@ -21,6 +21,7 @@ const Title = styled("div")({
 
 const MoviePage = () => {
   const location = useLocation();
+  // display page title and render movie list by calling MovieItem component
   return (
     <>
       <NavBar />
