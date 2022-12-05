@@ -1,6 +1,7 @@
 package com.example.ensf480.Service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +19,7 @@ public class MovieService {
 			this.movieDao = movieDao;
 		} 
 
-		public List<Movie> getAllMovie() {
+		public List<Map<String,Object>> getAllMovie() {
 			return movieDao.getAllMovies();
 		}
  }

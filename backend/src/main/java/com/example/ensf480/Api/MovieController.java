@@ -1,6 +1,7 @@
 package com.example.ensf480.Api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +25,7 @@ public class MovieController {
 	}
 
 	@GetMapping("/all")
-	public List<Movie> getAllMovie() {
+	public List<Map<String, Object>> getAllMovie() {
 		return movieService.getAllMovie();
 	}
 

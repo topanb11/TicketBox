@@ -26,6 +26,7 @@ public class TicketPostgresAccessService implements TicketDao {
     private final String GET_SEATS_BY_SHOWTIME = "SELECT seatNo FROM ticket WHERE showtimeId = ?";
     private final String GET_SHOWTIME = "SELECT showtime FROM showtime WHERE id = ?";
     private final String GET_TICKET = "SELECT * FROM ticket WHERE id = ?";
+    private final String GET_SHOWTIME_COUNT = "SELECT COUNT(*) FROM showtime WHERE id = ?";
 
     @Autowired
     public TicketPostgresAccessService(JdbcTemplate jdbcTemplate) {
@@ -34,6 +35,20 @@ public class TicketPostgresAccessService implements TicketDao {
 
     @Override
     public Ticket createTicket(Ticket ticket) {
+        UUID showTimeId = UUID.fromString(ticket.getShowtimeId());
+        
+        Integer count = jdbcTemplate.queryForObject(GET_SHOWTIME_COUNT, Integer.class, showTimeId);
+
+        if (count == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Showtime does not exist");
+        }
+
+        List<Integer> result = jdbcTemplate.queryForList(GET_SEATS_BY_SHOWTIME, Integer.class, ticket.getShowtimeId());
+
+        if (result.contains(ticket.getSeatNo())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Seat already taken");
+        }
+
         try {
             jdbcTemplate.update(INSERT_QUERY,
                     new Object[] { ticket.getId(), ticket.getShowtimeId(), ticket.getSeatNo(), ticket.getBuyerEmail(),
@@ -106,5 +121,4 @@ public class TicketPostgresAccessService implements TicketDao {
         List<Integer> result = jdbcTemplate.queryForList(GET_SEATS_BY_SHOWTIME, Integer.class, showtime_id.toString());
         return result;
     }
-
 }

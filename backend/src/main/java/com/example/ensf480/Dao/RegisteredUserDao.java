@@ -9,4 +9,6 @@ public interface RegisteredUserDao {
 
     RegisteredUser reactivate(String id);
 
+    RegisteredUser getUserByEmail(String email);
+
 }

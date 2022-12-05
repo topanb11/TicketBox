@@ -20,7 +20,8 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
     private final JdbcTemplate jdbcTemplate;
     private final String INSERT_QUERY = "INSERT INTO ru (id, firstName, lastName, email, password, address, creditCardNumber, creditCardExpirationDate, ccv, validUntil) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private final String CHECK_EMAIL_EXISTS = "SELECT COUNT(*) FROM ru WHERE email = ?";
-    private final String GET_USER = "SELECT * FROM ru WHERE email = ? AND password = ?";
+    private final String GET_USER_BY_CREDENTIALS = "SELECT * FROM ru WHERE email = ? AND password = ?";
+    private final String GET_USER_BY_EMAIL = "SELECT * FROM ru WHERE email = ?";
     private final String GET_USER_BY_ID = "SELECT * FROM ru WHERE id = ?";
     private final String UPDATE_USER = "UPDATE ru SET validUntil = ? WHERE id = ?";
 
@@ -50,7 +51,7 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
     public RegisteredUser login(String email, String password) {
         RegisteredUser result;
         try {
-            result = jdbcTemplate.queryForObject(GET_USER, (resultSet, i) -> {
+            result = jdbcTemplate.queryForObject(GET_USER_BY_CREDENTIALS, (resultSet, i) -> {
                 RegisteredUser temp = new RegisteredUser(
                         UUID.fromString(resultSet.getString("id")),
                         resultSet.getString("firstName"),
@@ -98,6 +99,31 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unable to reactivate account");
         }
+        return result;
+    }
+
+    @Override
+    public RegisteredUser getUserByEmail(String email) {
+        RegisteredUser result;
+        try {
+            result = jdbcTemplate.queryForObject(GET_USER_BY_EMAIL, (resultSet, i) -> {
+                RegisteredUser temp = new RegisteredUser(
+                        UUID.fromString(resultSet.getString("id")),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password"),
+                        resultSet.getString("address"),
+                        resultSet.getString("creditCardNumber"),
+                        resultSet.getString("ccv"),
+                        resultSet.getString("creditCardExpirationDate"));
+                temp.setValidUntil(resultSet.getTimestamp("validUntil"));
+                return temp;
+            }, email);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+        }
+
         return result;
     }
 
