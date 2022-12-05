@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository("PostgresMovieDao")
 public class MoviePostgresAccessService implements MovieDao{
 		// SQL query to fetch all movies and showtimes
-		final String QUERY = "SELECT t1.*, t2.id AS showtimeID, t2.showtime FROM movie AS t1 JOIN showtime AS t2 ON t1.id::varchar = t2.movieid;";
+		final String QUERY = "SELECT t1.*, t2.id AS showtimeID, t2.showtime, t2.presale FROM movie AS t1 JOIN showtime AS t2 ON t1.id::varchar = t2.movieid;";
 		// Instance of JdbcTempalte to connect to database
 		private JdbcTemplate jdbcTemplate;
 
@@ -52,6 +52,7 @@ public class MoviePostgresAccessService implements MovieDao{
 				}
 				showtime.put("showtimeId", movies.get(i).get("showtimeId"));
 				showtime.put("timestamp", movies.get(i).get("showtime"));
+				showtime.put("presale", movies.get(i).get("presale"));
 				tmpShowtimes.add(showtime);
 			}
 			return formattedMovies;
