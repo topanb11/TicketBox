@@ -74,9 +74,6 @@ public class TicketPostgresAccessService implements TicketDao {
     @Override
     public List<Integer> getSeatsByShowtime(UUID showtime_id) {
         List<Integer> result = jdbcTemplate.queryForList(GET_SEATS_BY_SHOWTIME, Integer.class, showtime_id.toString());
-        if (result.size() == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tickets found for showtime.");
-        }
         return result;
     }
 }
