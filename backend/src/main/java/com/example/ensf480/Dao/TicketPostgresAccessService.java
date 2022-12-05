@@ -21,9 +21,9 @@ import com.example.ensf480.Model.Ticket;
 @Repository("postgresTicket")
 public class TicketPostgresAccessService implements TicketDao {
 
-		// Instance of JdbcTemplate to access database
+    // Instance of JdbcTemplate to access database
     private final JdbcTemplate jdbcTemplate;
-		// SQL queries to fetch data
+    // SQL queries to fetch data
     private final String INSERT_QUERY = "INSERT INTO ticket (id, showtimeId, seatNo, buyerEmail, ruFlag) VALUES (?, ?, ?, ?, ?)";
     private final String DELETE_QUERY = "DELETE FROM ticket WHERE id = ?";
     private final String GET_SEATS_BY_SHOWTIME = "SELECT seatNo FROM ticket WHERE showtimeId = ?";
@@ -31,13 +31,13 @@ public class TicketPostgresAccessService implements TicketDao {
     private final String GET_TICKET = "SELECT * FROM ticket WHERE id = ?";
     private final String GET_SHOWTIME_COUNT = "SELECT COUNT(*) FROM showtime WHERE id = ?";
 
-		// Depdency Injection
+    // Depdency Injection
     @Autowired
     public TicketPostgresAccessService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-		// Function to add Ticket to database table
+    // Function to add Ticket to database table
     @Override
     public Ticket createTicket(Ticket ticket) {
         UUID showTimeId = UUID.fromString(ticket.getShowtimeId());
@@ -64,7 +64,7 @@ public class TicketPostgresAccessService implements TicketDao {
         return ticket;
     }
 
-		// Function to remove a Ticket from the database table
+    // Function to remove a Ticket from the database table
     @Override
     public String deleteTicket(String id, Boolean isRu) {
         UUID uuid;
@@ -116,19 +116,19 @@ public class TicketPostgresAccessService implements TicketDao {
             if (isRu) {
                 return "Successfuly refunded ticket with no fee!";
             }
-            return "Successfuly refunded ticket with a 15% refund fee.";
+            return "You have successfuly received a refund of $14.87";
         }
         return "Could not find ticket.";
     }
 
-		// Function to get seats based on showtime
+    // Function to get seats based on showtime
     @Override
     public List<Integer> getSeatsByShowtime(UUID showtime_id) {
         List<Integer> result = jdbcTemplate.queryForList(GET_SEATS_BY_SHOWTIME, Integer.class, showtime_id.toString());
         return result;
     }
 
-		// Function to cancel a pending ticket
+    // Function to cancel a pending ticket
     @Override
     public void cancelPendingTicket(String id) {
         Object[] args = new Object[] { UUID.fromString(id) };
