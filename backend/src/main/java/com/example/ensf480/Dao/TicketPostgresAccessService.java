@@ -105,8 +105,7 @@ public class TicketPostgresAccessService implements TicketDao {
             return "Can't cancel tickets for movies that are playing in less than 72 hours.";
         }
         Object[] args = new Object[] { uuid };
-        // int res = jdbcTemplate.update(DELETE_QUERY, args);
-        int res = 1;
+        int res = jdbcTemplate.update(DELETE_QUERY, args);
         if (res == 1) {
             if (isRu) {
                 return "Successfuly refunded ticket with no fee!";

@@ -19,13 +19,13 @@ VALUES
 -- Inserting a user with valid account and an expired account
 INSERT INTO ru (id, firstname, lastname, email, password, address, creditcardnumber, creditcardexpirationdate, ccv, validUntil)
 VALUES
-	(uuid_generate_v4(), 'Topan', 'Nguyen', 'topan@gmail.com', 'test', '123 street', '3423458255', '01/08/29', '555', '2023-12-04T17:22:28.814+00:00'),
-	(uuid_generate_v4(), 'Brian', 'Nguyen', 'brian@gmail.com', 'test', '123 street', '3423458255', '01/08/29', '555', '2022-12-03T17:22:28.814+00:00');
+	(uuid_generate_v4(), 'Topan', 'Nguyen', 'topan@gmail.com', 'test', '123 street', '3423458255234567', '01/08/29', '555', '2023-12-04T17:22:28.814+00:00'),
+	(uuid_generate_v4(), 'Brian', 'Nguyen', 'brian@gmail.com', 'test', '123 street', '3423458255234567', '01/08/29', '555', '2022-12-03T17:22:28.814+00:00');
 
 -- Generating list of showtimes
 INSERT INTO showtime (id, movieid, showroom, showtime)
 VALUES
-	('0df2909f-813c-424f-a774-fa7df72cfd12', '0df2909f-813c-424f-a774-fa7df72cffed', 5, '2023-12-04T19:00:00.814+00:00'),
+	(uuid_generate_v4(), '0df2909f-813c-424f-a774-fa7df72cffed', 5, '2023-12-04T19:00:00.814+00:00'),
 	(uuid_generate_v4(), '0df2909f-813c-424f-a774-fa7df72cffed', 5, '2023-12-04T20:00:00.814+00:00'),
 	(uuid_generate_v4(), '0df2909f-813c-424f-a774-fa7df72cffed', 5, '2023-12-04T21:00:00.814+00:00'),
 	(uuid_generate_v4(), '0df2909f-813c-424f-a774-fa7df72cff55', 5, '2023-12-04T19:00:00.814+00:00'),

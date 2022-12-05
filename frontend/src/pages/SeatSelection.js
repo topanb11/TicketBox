@@ -51,13 +51,6 @@ const SeatContainer = styled(Grid)({
   padding: "0 10% 5% 10%",
 });
 
-const movie = {
-  id: "0df2909f-813c-424f-a774-fa7df72cffe4",
-  name: "Men in Black",
-  cover:
-    "https://m.media-amazon.com/images/M/MV5BOTlhYTVkMDktYzIyNC00NzlkLTlmN2ItOGEyMWQ4OTA2NDdmXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg",
-};
-
 const showtime = {
   id: "0df2909f-813c-424f-a774-fa7df72cfd12",
   timestamp: "2023-12-04 19:00:00.814",
@@ -74,13 +67,14 @@ const SeatSelection = () => {
   for (let i = 0; i < 48; i++) {
     seats.push(i + 1);
   }
+	const showtimeId = location.state.showtime.showtimeId;
 
   useEffect(() => {
     getUnavailableSeats();
   }, []);
 
   const getUnavailableSeats = () => {
-    const showtime_id = showtime.id;
+    const showtime_id = showtimeId;
     axios
       .get(`http://localhost:8080/api/v1/ticket/seats/by/${showtime_id}`, {})
       .then((response) => {
@@ -150,7 +144,7 @@ const SeatSelection = () => {
           </SeatContainer>
           <Legend></Legend>
         </TheatreContainer>
-        <Checkout seats={selectedSeats}></Checkout>
+        <Checkout seats={selectedSeats} showtimeId={location.state.showtime.showtimeId}></Checkout>
       </Wrapper>
     </>
   );
