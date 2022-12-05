@@ -1,10 +1,12 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import { Navigate, useNavigate } from "react-router";
+import { MoviesContext } from "../context/MoviesContext.js";
+import moment from "moment";
 
 const MovieListContainer = styled("ul")({
   paddingLeft: "10%",
@@ -61,40 +63,59 @@ const DropdownMenuStyle = {
   height: "50px",
 };
 
-const MovieItem = ({ data, title }) => {
-	const navigate = useNavigate();
-  const [time, setTime] = useState(0);
-	const [showtimeID, setShowtimeID] = useState('');
+const MovieItem = ({ search }) => {
+  const { movies, setMovies } = useContext(MoviesContext);
+  const navigate = useNavigate();
 
-  const handleTimeChange = (event) => {
-		setTime(event.target.value);
+  const handleTimeChange = (event, data) => {
+    let newMovies = [...movies];
+    for (let i = 0; i < movies.length; i++) {
+      if (newMovies[i].id == data.id) {
+        for (let j = 0; j < newMovies[i].showtimes.length; j++) {
+          if (newMovies[i].showtimes[j].timestamp == event.target.value) {
+            newMovies[i].selectedShowtime = newMovies[i].showtimes[j];
+            break;
+          }
+        }
+        break;
+      }
+    }
+    setMovies(newMovies);
   };
 
-	const handleMenuClick = ( id ) => {
-		setShowtimeID(id);
-	}
-
-	const convertTime = ( time ) => {
-		let unixtime = Date.parse(time);
-		let selectedTime = new Intl.DateTimeFormat('en-US', {hour: '2-digit', 
-		minute: '2-digit', second: '2-digit'}).format(unixtime);
-		return selectedTime;
-	}
-
-  const handleClick = ( id, name ) => {
-		navigate("/seatselection", {state: 
-			{
-				movieID: id, 
-				title: name, 
-				showtime: {time: time, showtimeID: showtimeID}
-			}});
+  const convertTime = (time) => {
+    console.log(time);
+    let unixtime = Date.parse(time);
+    console.log(unixtime);
+    unixtime /= 1000;
+    return moment.unix(unixtime).format("MMM Do YYYY, h:mm A");
   };
+
+  const handleClick = (movie) => {
+    console.log(movie);
+    navigate("/seatselection", {
+      state: {
+        movie,
+      },
+    });
+  };
+
+  if (
+    movies.filter((data) => data.name.toLowerCase().includes(search)).length ==
+    0
+  ) {
+    return (
+      <MovieListContainer>
+        <ShowtimeText>No movies found</ShowtimeText>
+      </MovieListContainer>
+    );
+  }
 
   return (
     <>
       <MovieListContainer>
-        {data
-          .filter((data) => data.name.toLowerCase().includes(title))
+        {movies
+          .filter((data) => data.name.toLowerCase().includes(search))
           .map((data) => (
             <MovieListItem key={data.id}>
               <MovieImg src={data.cover} />
@@ -102,10 +123,15 @@ const MovieItem = ({ data, title }) => {
                 <MovieTitle>{data.name}</MovieTitle>
                 <ShowtimeText>Showtimes</ShowtimeText>
                 <FormControl sx={DropdownMenuStyle} size="small">
-                  <Select value={time} onChange={(event) => handleTimeChange(event)}>
+                  <Select
+                    value={data.selectedShowtime.timestamp}
+                    onChange={(event) => handleTimeChange(event, data)}
+                  >
                     {data.showtimes.map((showtime) => (
-                      <MenuItem key={showtime.showtimeID} value={convertTime(showtime.timestamp)} 
-											onClick={() => handleMenuClick(showtime.showtimeID)}>
+                      <MenuItem
+                        key={showtime.showtimeID}
+                        value={showtime.timestamp}
+                      >
                         {convertTime(showtime.timestamp)}
                       </MenuItem>
                     ))}
@@ -113,7 +139,7 @@ const MovieItem = ({ data, title }) => {
                 </FormControl>
                 <ViewSeatsButton
                   variant="contained"
-                  onClick={() => handleClick(data.id, data.name)}
+                  onClick={() => handleClick(data)}
                 >
                   VIEW SEATS
                 </ViewSeatsButton>
