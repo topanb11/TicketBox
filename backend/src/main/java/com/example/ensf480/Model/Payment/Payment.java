@@ -8,12 +8,24 @@ import java.util.Date;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+// Concrete payment class that uses PaymentStrategy interface
 public class Payment {
+		// Instance of PaymentStrategy
     private PaymentStrategy paymentStrategy;
+		// Credit card number
     private String ccNo;
+		// CCV number
     private int ccv;
+		// Expiration date
     private String expDate;
 
+		/**
+		 * Constructo for Payment object
+		 * @param paymentStrategy - Instance of payment strategy depending on how user pays for order
+		 * @param ccNo - Credit card number
+		 * @param ccv - CCV number
+		 * @param expDate - Expiration Date
+		 */
     public Payment(PaymentStrategy paymentStrategy, String ccNo, int ccv, String expDate) {
         this.paymentStrategy = paymentStrategy;
         this.ccNo = ccNo;
@@ -21,10 +33,19 @@ public class Payment {
         this.expDate = expDate;
     }
 
+		/**
+		 * Setter to change payment strategy
+		 * @param paymentStrategy - Instance of PaymentStrategy
+		 */
     public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
         this.paymentStrategy = paymentStrategy;
     }
 
+		/**
+		 * Checks if expiration date is valid
+		 * @param expDate - Expiration date
+		 * @return boolean
+		 */
     public boolean validExpDate(String expDate) {
         String monthStr = expDate.substring(0, 2);
         int month = Integer.parseInt(monthStr);
@@ -45,6 +66,11 @@ public class Payment {
         }
     }
 
+		/**
+		 * Method to process payment
+		 * @param amount - cost of tickets
+		 * @return String
+		 */
     public String processPayment(double amount) {
         if (!validExpDate(expDate)) {
             return "Invalid Expiry Date";
