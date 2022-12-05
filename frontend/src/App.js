@@ -8,6 +8,7 @@ import LogIn from "./pages/LogIn";
 import MoviePage from "./pages/MoviePage";
 import SeatSelection from "./pages/SeatSelection";
 import { UserContext } from "./context/UserContext";
+import { MoviesContext } from "./context/MoviesContext";
 
 const theme = createTheme({
   palette: {
@@ -19,22 +20,29 @@ const theme = createTheme({
 
 function App() {
   const [user, setUser] = useState(null);
+  const [movies, setMovies] = useState([]);
 
-  const contextValue = useMemo(() => ({ user, setUser }), [user, setUser]);
+  const userContextValue = useMemo(() => ({ user, setUser }), [user, setUser]);
+  const moviesContextValue = useMemo(
+    () => ({ movies, setMovies }),
+    [movies, setMovies]
+  );
 
   return (
     <ThemeProvider theme={theme}>
       <div>
         <BrowserRouter>
-          <UserContext.Provider value={contextValue}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<LogIn />} />
-              <Route path="/movies" element={<MoviePage />} />
-              <Route path="/seatselection" element={<SeatSelection />} />
-            </Routes>
-          </UserContext.Provider>
+          <MoviesContext.Provider value={moviesContextValue}>
+            <UserContext.Provider value={userContextValue}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<LogIn />} />
+                <Route path="/movies" element={<MoviePage />} />
+                <Route path="/seatselection" element={<SeatSelection />} />
+              </Routes>
+            </UserContext.Provider>
+          </MoviesContext.Provider>
         </BrowserRouter>
       </div>
     </ThemeProvider>

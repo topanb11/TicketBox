@@ -8,6 +8,7 @@ import Legend from "../components/Legend";
 import Checkout from "../components/Checkout.js";
 import { UserContext } from "../context/UserContext.js";
 import axios from "axios";
+import moment from "moment";
 
 const Wrapper = styled("div")({
   display: "flex",
@@ -66,7 +67,7 @@ const SeatSelection = () => {
   for (let i = 0; i < 48; i++) {
     seats.push(i + 1);
   }
-	const showtimeId = location.state.showtime.showtimeId;
+  const showtimeId = location.state.showtime.showtimeId;
 
   useEffect(() => {
     getUnavailableSeats();
@@ -77,7 +78,6 @@ const SeatSelection = () => {
     axios
       .get(`http://localhost:8080/api/v1/ticket/seats/by/${showtime_id}`, {})
       .then((response) => {
-        console.log(response);
         setUnavailableSeats(response.data);
       })
       .catch((response) => {
@@ -87,18 +87,23 @@ const SeatSelection = () => {
 
   // handle selecting seats -> add/remove seat from selectedSeats
   const clickSeat = (seat) => {
-    console.log("seat clicked", seat);
     if (selectedSeats.includes(seat)) {
-      console.log("removing");
       // remove seat from selection
       const updatedSeats = selectedSeats.filter((s) => s !== seat);
       setSelectedSeats(updatedSeats);
     } else {
-      console.log("adding");
       // add seat to selection
       const updatedSeats = [...selectedSeats, seat];
       setSelectedSeats(updatedSeats);
     }
+  };
+
+  const convertTime = (time) => {
+    console.log(time);
+    let unixtime = Date.parse(time);
+    console.log(unixtime);
+    unixtime /= 1000;
+    return moment.unix(unixtime).format("MMM Do YYYY, h:mm A");
   };
 
   // check state of seat (available, unavailable, selected) and pass in correct value to Seat component
@@ -128,8 +133,10 @@ const SeatSelection = () => {
     <>
       <NavBar></NavBar>
       <Wrapper>
-        <Title>{location.state.title}</Title>
-        <Body>{location.state.showtime.time}</Body>
+        <Title>{location.state.movie.name}</Title>
+        <Body>
+          {convertTime(location.state.movie.selectedShowtime.timestamp)}
+        </Body>
         <TheatreContainer>
           <Screen>SCREEN</Screen>
           <SeatContainer container spacing={2}>
@@ -137,7 +144,10 @@ const SeatSelection = () => {
           </SeatContainer>
           <Legend></Legend>
         </TheatreContainer>
-        <Checkout seats={selectedSeats} showtimeId={location.state.showtime.showtimeId}></Checkout>
+        <Checkout
+          seats={selectedSeats}
+          showtimeId={location.state.movie.selectedShowtime.showtimeId}
+        ></Checkout>
       </Wrapper>
     </>
   );
