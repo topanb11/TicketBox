@@ -133,7 +133,18 @@ const Home = () => {
       // add selectedShowtime property to each movie and set to first showtime
       let movies = response.data;
       for (let i = 0; i < movies.length; i++) {
-        movies[i]["selectedShowtime"] = movies[i].showtimes[0];
+        // if user logged in, set first showtime to default selected showtime
+        if (user) {
+          movies[i]["selectedShowtime"] = movies[i].showtimes[0];
+        } else {
+          // if user is not logged in -> set first non presale showtime to default selected showtime
+          for (let j = 0; j < movies[i].showtimes.length; j++) {
+            if (!movies[i].showtimes[j].presale) {
+              movies[i]["selectedShowtime"] = movies[i].showtimes[j];
+              break;
+            }
+          }
+        }
       }
       setMovies(movies); // update movies context
     });

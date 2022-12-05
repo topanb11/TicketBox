@@ -150,9 +150,9 @@ const MovieItem = ({ search }) => {
                           <MenuItem
                             key={showtime.showtimeId}
                             value={showtime.timestamp}
-                            style={{}}
                           >
                             {convertTime(showtime.timestamp)}
+                            {showtime.presale ? " (Presale)" : null}
                           </MenuItem>
                         )
                     )}

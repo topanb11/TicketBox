@@ -131,6 +131,9 @@ const SeatSelection = () => {
         <Body>
           {convertTime(location.state.movie.selectedShowtime.timestamp)}
         </Body>
+        {location.state.movie.selectedShowtime.presale ? (
+          <Body style={{ paddingTop: "1%", color: "#E16138" }}>Presale</Body>
+        ) : null}
         <TheatreContainer>
           <Screen>SCREEN</Screen>
           <SeatContainer container spacing={2}>
