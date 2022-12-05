@@ -32,4 +32,8 @@ public class RegisteredUserService {
         String id = (String) userMap.get("id");
         return userDao.reactivate(id);
     }
+
+    public RegisteredUser getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
+    }
 }
