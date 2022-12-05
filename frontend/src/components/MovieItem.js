@@ -64,15 +64,30 @@ const DropdownMenuStyle = {
 const MovieItem = ({ data, title }) => {
 	const navigate = useNavigate();
   const [time, setTime] = useState(0);
+	const [showtimeID, setShowtimeID] = useState('');
 
   const handleTimeChange = (event) => {
-    console.log(event.target.value);
-    setTime(event.target.value);
+		setTime(event.target.value);
   };
 
-  const handleClick = (id, name) => {
-    console.log("movie page", id, name, time);
-		navigate("/seatselection", {state: {id: id, title: name, showtime: time}});
+	const handleMenuClick = ( id ) => {
+		setShowtimeID(id);
+	}
+
+	const convertTime = ( time ) => {
+		let unixtime = Date.parse(time);
+		let selectedTime = new Intl.DateTimeFormat('en-US', {hour: '2-digit', 
+		minute: '2-digit', second: '2-digit'}).format(unixtime);
+		return selectedTime;
+	}
+
+  const handleClick = ( id, name ) => {
+		navigate("/seatselection", {state: 
+			{
+				movieID: id, 
+				title: name, 
+				showtime: {time: time, showtimeID: showtimeID}
+			}});
   };
 
   return (
@@ -87,13 +102,13 @@ const MovieItem = ({ data, title }) => {
                 <MovieTitle>{data.name}</MovieTitle>
                 <ShowtimeText>Showtimes</ShowtimeText>
                 <FormControl sx={DropdownMenuStyle} size="small">
-                  <Select value={time} onChange={handleTimeChange}>
-										{/* \==== ADD SHOWTIMES API CALL LATER ====| */}
-                    {/* {data.times.map((times) => (
-                      <MenuItem key={times} value={times}>
-                        {times}
+                  <Select value={time} onChange={(event) => handleTimeChange(event)}>
+                    {data.showtimes.map((showtime) => (
+                      <MenuItem key={showtime.showtimeID} value={convertTime(showtime.timestamp)} 
+											onClick={() => handleMenuClick(showtime.showtimeID)}>
+                        {convertTime(showtime.timestamp)}
                       </MenuItem>
-                    ))} */}
+                    ))}
                   </Select>
                 </FormControl>
                 <ViewSeatsButton

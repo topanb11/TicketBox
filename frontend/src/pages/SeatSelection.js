@@ -104,7 +104,7 @@ const SeatSelection = () => {
       <NavBar></NavBar>
       <Wrapper>
         <Title>{location.state.title}</Title>
-        <Body>{location.state.showtime} PM</Body>
+        <Body>{location.state.showtime.time}</Body>
         <TheatreContainer>
           <Screen>SCREEN</Screen>
           <SeatContainer container spacing={2}>
