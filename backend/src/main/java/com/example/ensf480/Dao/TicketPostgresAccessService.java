@@ -18,7 +18,7 @@ public class TicketPostgresAccessService implements TicketDao {
     private final String INSERT_QUERY = "INSERT INTO ticket (id, showtimeId, seatNo, buyerEmail, ruFlag) VALUES (?, ?, ?, ?, ?)";
     private final String DELETE_QUERY = "DELETE FROM ticket WHERE id = ?";
     private final String GET_SEATS_BY_SHOWTIME = "SELECT seatNo FROM ticket WHERE showtimeId = ?";
-    private final String CHECK_IF_SHOWTIME_EXISTS = "SELECT EXISTS(SELECT 1 FROM showtime WHERE id = ?)";
+    private final String GET_SHOWTIME_COUNT = "SELECT COUNT(*) FROM showtime WHERE id = ?";
 
 
     @Autowired
@@ -28,13 +28,13 @@ public class TicketPostgresAccessService implements TicketDao {
 
     @Override
     public Ticket createTicket(Ticket ticket) {
-        // UUID showTimeId = UUID.nameUUIDFromBytes(ticket.getShowtimeId().getBytes());        
-        // jdbcTemplate.query(CHECK_IF_SHOWTIME_EXISTS, (rs, rowNum) -> {
-        //     if (rs.getBoolean(1) == false) {
-        //         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Showtime does not exist");
-        //     }
-        //     return null;
-        // }, showTimeId);
+        UUID showTimeId = UUID.fromString(ticket.getShowtimeId());
+        
+        Integer count = jdbcTemplate.queryForObject(GET_SHOWTIME_COUNT, Integer.class, showTimeId);
+
+        if (count == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Showtime does not exist");
+        }
 
         List<Integer> result = jdbcTemplate.queryForList(GET_SEATS_BY_SHOWTIME, Integer.class, ticket.getShowtimeId());
 
