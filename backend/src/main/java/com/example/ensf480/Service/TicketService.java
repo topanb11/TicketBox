@@ -56,7 +56,7 @@ public class TicketService {
             ticketNos.add(ticketDao.createTicket(ticket));
         }
 
-        PaymentStrategy paymentStrategy = null;
+        PaymentStrategy paymentStrategy = new VisaPayment(); // Process as Visa payment by default
 
         if (user.getCreditCardNumber().charAt(0) == '3') {
             paymentStrategy = new AmexPayment();
@@ -68,7 +68,7 @@ public class TicketService {
 
         Receipt receipt = new Receipt(ticketNos);
         Payment payment = new Payment(paymentStrategy, user.getCreditCardNumber(), user.getCcv(), user.getExpiryDate());
-        if(payment.processPayment(receipt.getTotal())) {
+        if (payment.processPayment(receipt.getTotal())) {
             System.out.println("Payment successful");
             EmailApiSingleton emailApiService = EmailApiSingleton.getOnlyInstance();
             emailApiService.sendConfirmationEmail(user.getEmail(), receipt);

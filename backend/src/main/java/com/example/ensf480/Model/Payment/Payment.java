@@ -26,10 +26,9 @@ public class Payment {
     }
 
     public boolean validExpDate(String expDate) {
-
         try {
-            Date expirationDate = new SimpleDateFormat("dd/MM/yyyy").parse(expDate);
-            Date currentDate = new Date(); 
+            Date expirationDate = new SimpleDateFormat("MMyy").parse(expDate);
+            Date currentDate = new Date();
             if (expirationDate.after(currentDate)) {
                 return true;
             } else {
