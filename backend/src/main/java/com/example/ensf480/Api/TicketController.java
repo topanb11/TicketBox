@@ -22,34 +22,41 @@ import com.example.ensf480.Model.User;
 import com.example.ensf480.Service.RegisteredUserService;
 import com.example.ensf480.Service.TicketService;
 
+// API route for Ticket entity
 @RequestMapping("api/v1/ticket")
 @RestController
 @CrossOrigin
 public class TicketController {
+		// Instances of TicketService and RegisteredUserService to gain access to methods
     private final TicketService ticketService;
     private final RegisteredUserService registeredUserService;
 
+		// Dependency injeciton
     @Autowired
     public TicketController(TicketService ticketService, RegisteredUserService userService) {
         this.ticketService = ticketService;
         this.registeredUserService = userService;
     }
 
+		// API route to create a instantiate a new Ticket object
     @PostMapping(path = "create")
     public Ticket createTicket(@RequestBody Ticket ticket) {
         return ticketService.createTicket(ticket);
     }
 
+		// API route to delete a Ticket object
     @DeleteMapping(path = "/delete")
     public String deleteTicket(@RequestBody Map<String, Object> ticketMap) {
         return ticketService.deleteTicket(ticketMap);
     }
 
+		// API route to fetch all Tickets based on showtime
     @GetMapping(path = "/seats/by/{showtime_id}")
     public List<Integer> getSeatsByShowtime(@PathVariable("showtime_id") String showtime_id) {
         return ticketService.getSeatsByShowtime(UUID.fromString(showtime_id));
     }
 
+		// API route to process payment for registered users
     @PostMapping(path = "/checkout/ru")
     public List<Ticket> checkout(@RequestBody Map<String, Object> ticketMap) {
         String showtimeId = (String) ticketMap.get("showtimeId");
@@ -64,6 +71,7 @@ public class TicketController {
         }
     }
 
+		// API route to process payment for guest users
     @PostMapping(path = "/checkout/guest")
     public List<Ticket> checkoutGuest(@RequestBody Map<String, Object> ticketMap) {
         String showtimeId = (String) ticketMap.get("showtimeId");
