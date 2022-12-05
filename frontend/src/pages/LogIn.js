@@ -66,11 +66,20 @@ const LogIn = () => {
 
   const continueAsGuest = () => {
     setDialogOpen(false);
+    setUser(null);
     navigate("/");
   };
 
   const reactivateAccount = () => {
-    // API Call
+    axios
+      .post("http://localhost:8080/api/v1/user/reactivate", {id: user.id})
+      .then( response => {
+        setUser(response.data);
+        navigate("/");
+      })
+      .catch(function(error) {
+        console.log(error.response.data.message);
+      });
   };
 
   const renderDialog = () => {
@@ -101,16 +110,18 @@ const LogIn = () => {
 			password: password
 		})
 		.then(response => {
-			alert("Login Successful!");
-			setUser(response.data);
-			const currentDate = new Date();
+      setUser(response.data);
+      const currentDate = new Date();
 			const receivedDate = new Date(response.data.validUntil);
 			const isRU = true;
 			const validRU = (receivedDate.getTime() > currentDate.getTime()) ? true : false;
 			if (isRU && !validRU) {
-				setDialogOpen(true);
-			}
-			navigate("/");
+        setDialogOpen(true);
+      } else {
+        alert("Login Successful!");
+        setDialogOpen(false);
+        navigate("/");
+      }
 		})
 		.catch(response => {
 			alert(response.response.data.message);
