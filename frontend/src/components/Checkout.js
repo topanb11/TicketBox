@@ -87,7 +87,6 @@ const Checkout = (props) => {
 			})
 			.then(alert("Ticket successfuly purchased!"))
 			.catch(response => console.log(response));
-
 		}
   };
 

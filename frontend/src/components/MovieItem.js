@@ -127,7 +127,7 @@ const MovieItem = ({ search }) => {
                   >
                     {data.showtimes.map((showtime) => (
                       <MenuItem
-                        key={showtime.showtimeID}
+                        key={showtime.showtimeId}
                         value={showtime.timestamp}
                       >
                         {convertTime(showtime.timestamp)}

@@ -51,11 +51,6 @@ const SeatContainer = styled(Grid)({
   padding: "0 10% 5% 10%",
 });
 
-const showtime = {
-  id: "0df2909f-813c-424f-a774-fa7df72cfd12",
-  timestamp: "2023-12-04 19:00:00.814",
-};
-
 const SeatSelection = () => {
   // Object that has movie attributes
   const location = useLocation();
@@ -73,8 +68,7 @@ const SeatSelection = () => {
   }, []);
 
   const getUnavailableSeats = () => {
-    const showtime_id = location.state.movie["selectedShowtime"]["showtimeID"];
-    console.log(showtime_id);
+    const showtime_id = location.state.movie["selectedShowtime"]["showtimeId"];
     axios
       .get(`http://localhost:8080/api/v1/ticket/seats/by/${showtime_id}`, {})
       .then((response) => {

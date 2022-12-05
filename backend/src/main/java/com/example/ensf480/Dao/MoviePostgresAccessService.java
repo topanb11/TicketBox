@@ -42,7 +42,7 @@ public class MoviePostgresAccessService implements MovieDao{
 					tmpShowtimes = new ArrayList<>();
 
 				}
-				showtime.put("showtimeID", movies.get(i).get("showtimeID"));
+				showtime.put("showtimeId", movies.get(i).get("showtimeId"));
 				showtime.put("timestamp", movies.get(i).get("showtime"));
 				tmpShowtimes.add(showtime);
 			}
