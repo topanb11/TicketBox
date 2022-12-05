@@ -67,21 +67,21 @@ const SeatSelection = () => {
   for (let i = 0; i < 48; i++) {
     seats.push(i + 1);
   }
-  const showtimeId = location.state.showtime.showtimeId;
 
   useEffect(() => {
     getUnavailableSeats();
   }, []);
 
   const getUnavailableSeats = () => {
-    const showtime_id = showtimeId;
+    const showtime_id = location.state.movie["selectedShowtime"]["showtimeID"];
+    console.log(showtime_id);
     axios
       .get(`http://localhost:8080/api/v1/ticket/seats/by/${showtime_id}`, {})
       .then((response) => {
         setUnavailableSeats(response.data);
       })
       .catch((response) => {
-        alert(response.response.data.message);
+        alert("Failed to get purchased seats", response.response.data.message);
       });
   };
 
@@ -99,9 +99,7 @@ const SeatSelection = () => {
   };
 
   const convertTime = (time) => {
-    console.log(time);
     let unixtime = Date.parse(time);
-    console.log(unixtime);
     unixtime /= 1000;
     return moment.unix(unixtime).format("MMM Do YYYY, h:mm A");
   };
@@ -146,7 +144,7 @@ const SeatSelection = () => {
         </TheatreContainer>
         <Checkout
           seats={selectedSeats}
-          showtimeId={location.state.movie.selectedShowtime.showtimeId}
+          showtimeId={location.state.movie["selectedShowtime"]["showtimeId"]}
         ></Checkout>
       </Wrapper>
     </>

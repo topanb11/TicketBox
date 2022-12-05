@@ -84,9 +84,7 @@ const MovieItem = ({ search }) => {
   };
 
   const convertTime = (time) => {
-    console.log(time);
     let unixtime = Date.parse(time);
-    console.log(unixtime);
     unixtime /= 1000;
     return moment.unix(unixtime).format("MMM Do YYYY, h:mm A");
   };
