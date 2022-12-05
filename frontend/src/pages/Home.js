@@ -86,15 +86,19 @@ const Home = () => {
   const { user, setUser } = useContext(UserContext);
   const { movies, setMovies } = useContext(MoviesContext);
 
+  // event handler to update state on input change
   const handleChange = (event) => {
+    // user is changing Search field
     if (event.target.id == "search") {
       setSearch(event.target.value);
     }
+    // user is changing Cancel ticket field
     if (event.target.id == "ticketNo") {
       setTicketNo(event.target.value);
     }
   };
 
+  // on search submit, redirect user to movies page and pass in search query
   const handleSearchSubmit = () => {
     navigate("/movies", {
       state: {
@@ -103,6 +107,7 @@ const Home = () => {
     });
   };
 
+  // on ticket cancelation submit, check if user is logged in and call ticket cancellation api
   const handleCancelSubmit = () => {
     const isRu = user !== null;
     axios
@@ -122,13 +127,15 @@ const Home = () => {
       });
   };
 
+  // on page load, call movies api to get all movies
   useEffect(() => {
     axios.get("http://localhost:8080/api/v1/movie/all").then((response) => {
+      // add selectedShowtime property to each movie and set to first showtime
       let movies = response.data;
       for (let i = 0; i < movies.length; i++) {
         movies[i]["selectedShowtime"] = movies[i].showtimes[0];
       }
-      setMovies(movies);
+      setMovies(movies); // update movies context
     });
   }, []);
 

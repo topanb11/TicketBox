@@ -10,6 +10,7 @@ import SeatSelection from "./pages/SeatSelection";
 import { UserContext } from "./context/UserContext";
 import { MoviesContext } from "./context/MoviesContext";
 
+// custom theme
 const theme = createTheme({
   palette: {
     primary: {
@@ -19,9 +20,9 @@ const theme = createTheme({
 });
 
 function App() {
+  // set up context for user and movies list
   const [user, setUser] = useState(null);
   const [movies, setMovies] = useState([]);
-
   const userContextValue = useMemo(() => ({ user, setUser }), [user, setUser]);
   const moviesContextValue = useMemo(
     () => ({ movies, setMovies }),
