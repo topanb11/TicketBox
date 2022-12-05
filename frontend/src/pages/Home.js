@@ -104,10 +104,7 @@ const Home = () => {
   };
 
   const handleCancelSubmit = () => {
-    var isRu = false;
-    if (user == null) {
-      isRu = true;
-    }
+    const isRu = user !== null;
     axios
       .delete("http://localhost:8080/api/v1/ticket/delete", {
         data: {
@@ -117,6 +114,11 @@ const Home = () => {
       })
       .then((response) => {
         alert(response.data);
+        setTicketNo("");
+      })
+      .catch((response) => {
+        alert(response.response.data.message);
+        console.log(response);
       });
   };
 
