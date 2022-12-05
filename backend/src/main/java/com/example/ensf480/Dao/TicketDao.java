@@ -10,6 +10,8 @@ public interface TicketDao {
 
     String deleteTicket(String id, Boolean isRu);
 
+    void cancelPendingTicket(String id);
+
     List<Integer> getSeatsByShowtime(UUID showtime_id);
 
 }
