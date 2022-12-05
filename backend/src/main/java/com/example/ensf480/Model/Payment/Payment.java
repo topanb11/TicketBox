@@ -1,14 +1,20 @@
 package com.example.ensf480.Model.Payment;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 public class Payment {
     private PaymentStrategy paymentStrategy;
     private String ccNo;
     private int ccv;
-    private int expDate;
+    private String expDate;
 
-    public Payment(PaymentStrategy paymentStrategy, String ccNo, int ccv, int expDate) {
+    public Payment(PaymentStrategy paymentStrategy, String ccNo, int ccv, String expDate) {
         this.paymentStrategy = paymentStrategy;
         this.ccNo = ccNo;
         this.ccv = ccv;
@@ -19,36 +25,28 @@ public class Payment {
         this.paymentStrategy = paymentStrategy;
     }
 
-    public boolean validExpDate(int expDate) {
-        Calendar currentDate = Calendar.getInstance();
+    public boolean validExpDate(String expDate) {
 
-        Calendar expiry = Calendar.getInstance();
-        int currentYear = expiry.get(Calendar.YEAR);
-        currentYear /= 100;
-        currentYear *= 100;
-        int expiryYear = currentYear + expDate % 100;
-        int expiryMonth = expDate / 100;
-        if (expiryMonth > 12 || expiryMonth < 1) {
+        try {
+            Date expirationDate = new SimpleDateFormat("dd/MM/yyyy").parse(expDate);
+            Date currentDate = new Date(); 
+            if (expirationDate.after(currentDate)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (ParseException e) {
             return false;
         }
-        expiry.set(Calendar.YEAR, expiryYear);
-        expiry.set(Calendar.MONTH, expiryMonth - 1);
-        System.out.println(currentDate.getTime());
-        System.out.println(expiry.getTime());
-        if ((currentDate.compareTo(expiry)) > 0) {
-            return false;
-        }
-
-        return true;
     }
 
-    public String processPayment(double amount) {
+    public Boolean processPayment(double amount) {
         if (!validExpDate(expDate)) {
-            return "Invalid Expiry Date";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Expiry Date");
         }
         if (!paymentStrategy.processPayment(amount)) {
-            return "Failed to process payment. Please check credit card details and try again.";
+            return false;
         }
-        return "Success";
+        return true;
     }
 }
