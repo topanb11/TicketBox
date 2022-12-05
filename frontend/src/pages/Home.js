@@ -110,9 +110,9 @@ const Home = () => {
 			isRu: isRu
 			}
 		})
-		.then( response => {
+		.then(response => {
 			alert(response.data);
-			});
+		});
   };
 
 	useEffect(() => {
