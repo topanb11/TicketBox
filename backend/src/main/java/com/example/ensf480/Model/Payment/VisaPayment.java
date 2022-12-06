@@ -1,5 +1,6 @@
 package com.example.ensf480.Model.Payment;
 
+// VisaPayment strategy incase user pays via Visa
 public class VisaPayment implements PaymentStrategy {
     @Override
     public boolean processPayment(double amount) {

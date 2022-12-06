@@ -86,15 +86,19 @@ const Home = () => {
   const { user, setUser } = useContext(UserContext);
   const { movies, setMovies } = useContext(MoviesContext);
 
+  // event handler to update state on input change
   const handleChange = (event) => {
+    // user is changing Search field
     if (event.target.id == "search") {
       setSearch(event.target.value);
     }
+    // user is changing Cancel ticket field
     if (event.target.id == "ticketNo") {
       setTicketNo(event.target.value);
     }
   };
 
+  // on search submit, redirect user to movies page and pass in search query
   const handleSearchSubmit = () => {
     navigate("/movies", {
       state: {
@@ -103,11 +107,9 @@ const Home = () => {
     });
   };
 
+  // on ticket cancelation submit, check if user is logged in and call ticket cancellation api
   const handleCancelSubmit = () => {
-    var isRu = false;
-    if (user == null) {
-      isRu = true;
-    }
+    const isRu = user !== null;
     axios
       .delete("http://localhost:8080/api/v1/ticket/delete", {
         data: {
@@ -117,16 +119,34 @@ const Home = () => {
       })
       .then((response) => {
         alert(response.data);
+        setTicketNo("");
+      })
+      .catch((response) => {
+        alert(response.response.data.message);
+        console.log(response);
       });
   };
 
+  // on page load, call movies api to get all movies
   useEffect(() => {
     axios.get("http://localhost:8080/api/v1/movie/all").then((response) => {
+      // add selectedShowtime property to each movie and set to first showtime
       let movies = response.data;
       for (let i = 0; i < movies.length; i++) {
-        movies[i]["selectedShowtime"] = movies[i].showtimes[0];
+        // if user logged in, set first showtime to default selected showtime
+        if (user) {
+          movies[i]["selectedShowtime"] = movies[i].showtimes[0];
+        } else {
+          // if user is not logged in -> set first non presale showtime to default selected showtime
+          for (let j = 0; j < movies[i].showtimes.length; j++) {
+            if (!movies[i].showtimes[j].presale) {
+              movies[i]["selectedShowtime"] = movies[i].showtimes[j];
+              break;
+            }
+          }
+        }
       }
-      setMovies(movies);
+      setMovies(movies); // update movies context
     });
   }, []);
 

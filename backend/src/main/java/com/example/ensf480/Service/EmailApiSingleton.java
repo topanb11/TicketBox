@@ -13,17 +13,29 @@ import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 
+// Singleton class for EmailAPI
 public class EmailApiSingleton {
 
+		// private constructor to ensure only one instance is made
     private static EmailApiSingleton onlyInstance = null;
+		// API object
     SendGrid sendGridClient;
+		// API key
     private static final String API_KEY = "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";
+		// Email to send out emails
     private static final String FROM_EMAIL = "TicketBoxConfirmation@gmail.com";
 
+		/**
+		 * Constructor 
+		 */
     private EmailApiSingleton() {
         sendGridClient = new SendGrid(API_KEY);
     }
 
+		/**
+		 * Getter for only instnace of object, instantiate if null
+		 * @return EmailApiSingleton
+		 */
     public static EmailApiSingleton getOnlyInstance() {
         if (onlyInstance == null) {
             onlyInstance = new EmailApiSingleton();
@@ -31,6 +43,11 @@ public class EmailApiSingleton {
         return onlyInstance;
     }
 
+		/**
+		 * Method to send out confirmation email to user
+		 * @param to - Email or recipient
+		 * @param receipt - Receipt object
+		 */
     public void sendConfirmationEmail(String to, Receipt receipt) {
         Email from = new Email(FROM_EMAIL);
         Email toEmail = new Email(to);
@@ -92,7 +109,7 @@ public class EmailApiSingleton {
             htmlContent += "<h3>You have successfully refunded ticket no: " + id + "</h3>";
         } else {
             htmlContent += "<h3>You have successfully refunded ticket no: " + id + "</h3>";
-            htmlContent += "<h3>$" + 0.85 * Receipt.getCostPerTicketNumerical() + " (15%) has been withheld as a cancellation fee. </h3>";
+            htmlContent += "<h3>$" + 0.15 * Receipt.getCostPerTicketNumerical() + " (15%) has been withheld as a cancellation fee. </h3>";
         }
 
         Content content = new Content("text/html", htmlContent);

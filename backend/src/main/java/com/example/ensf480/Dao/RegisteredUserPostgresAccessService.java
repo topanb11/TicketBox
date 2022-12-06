@@ -14,10 +14,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.example.ensf480.Model.RegisteredUser;
 
+// Implementation from RegisteredUserDao interface
 @Repository("Postgres")
 public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
 
+		// Instance of JdbcTemplate to access db
     private final JdbcTemplate jdbcTemplate;
+		// SQL queries to fetch data
     private final String INSERT_QUERY = "INSERT INTO ru (id, firstName, lastName, email, password, address, creditCardNumber, creditCardExpirationDate, ccv, validUntil) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private final String CHECK_EMAIL_EXISTS = "SELECT COUNT(*) FROM ru WHERE email = ?";
     private final String GET_USER_BY_CREDENTIALS = "SELECT * FROM ru WHERE email = ? AND password = ?";
@@ -25,11 +28,13 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
     private final String GET_USER_BY_ID = "SELECT * FROM ru WHERE id = ?";
     private final String UPDATE_USER = "UPDATE ru SET validUntil = ? WHERE id = ?";
 
+		// Dependency Injeciton
     @Autowired
     public RegisteredUserPostgresAccessService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+		// Function to add user to table of RegisteredUsers
     @Override
     public RegisteredUser insertPerson(RegisteredUser person) {
         int count = jdbcTemplate.queryForObject(CHECK_EMAIL_EXISTS, Integer.class, person.getEmail());
@@ -47,6 +52,7 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
         return person;
     }
 
+		// Function to log user in to application
     @Override
     public RegisteredUser login(String email, String password) {
         RegisteredUser result;
@@ -72,6 +78,7 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
         return result;
     }
 
+		// Function to reactivate registered user's account
     @Override
     public RegisteredUser reactivate(String id) {
         Calendar cal = Calendar.getInstance();
@@ -102,6 +109,7 @@ public class RegisteredUserPostgresAccessService implements RegisteredUserDao {
         return result;
     }
 
+		// Function to fetch user by email
     @Override
     public RegisteredUser getUserByEmail(String email) {
         RegisteredUser result;

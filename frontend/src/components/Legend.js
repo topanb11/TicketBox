@@ -24,6 +24,7 @@ const Body = styled("div")({
   fontSize: "20px",
 });
 
+// render a responseive legend for selected/unavailable/available seats on seat selection
 const Legend = () => {
   return (
     <Container>

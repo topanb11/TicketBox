@@ -36,10 +36,12 @@ const NavBar = (props) => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
 
+  // log user out when user selects "Log out"
   const handleLogout = () => {
     setUser(null);
   };
 
+  // render navigation bar for logged in user
   if (user) {
     return (
       <Container>
@@ -52,6 +54,7 @@ const NavBar = (props) => {
       </Container>
     );
   } else {
+    // render navigation bar for gues user (not logged in)
     return (
       <Container>
         <Icon src={Logo} width="75px" onClick={() => navigate("/")}></Icon>

@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import { Button, Grid, TextField } from "@mui/material";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const SubTitle = styled("div")({
   fontFamily: "Roboto, sans-serif",
@@ -41,15 +42,17 @@ const Checkout = (props) => {
   const [ccNo, setCCNo] = useState("");
   const [ccv, setCCV] = useState("");
   const [expDate, setExpDate] = useState("");
-
+  const navigate = useNavigate();
   const count = props.seats.length;
-	const showtimeId = props.showtimeId;
+  const showtimeId = props.showtimeId;
 
+  // check input form validity before processing checkout
   const validForm = () => {
-    const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i; // regex to chekc for valid email
     if (user) {
-      return count !== 0;
+      return count !== 0; // if user logged in, only need to make sure they have selected a seat
     }
+    // if guest checkout, need to validate each input field
     return (
       firstName !== "" &&
       lastName !== "" &&
@@ -62,34 +65,47 @@ const Checkout = (props) => {
     );
   };
 
+  // handle checkout, display errror/success message and navigate back to home apge on success
   const handleSubmit = () => {
-		if (user) {
-			axios.post("http://localhost:8080/api/v1/ticket/checkout/ru", {
-				showtimeId: showtimeId,
-				buyerEmail: user.email,
-				seats: props.seats,
-			})
-			.then(alert("Tickets successfuly purchased!"))
-			.catch(response => console.log(response))
-
-		} else {
-			axios.post("http://localhost:8080/api/v1/ticket/checkout/guest", {
-				showtimeId: showtimeId,
-				buyerEmail: email,
-				seats: props.seats,
-				firstName: firstName,
-				lastName: lastName,
-				ccv: ccv,
-				cardNumber: ccNo,
-				expiryDate: expDate,
-				address: address,
-				selectedSeats: props.seats
-			})
-			.then(alert("Ticket successfuly purchased!"))
-			.catch(response => console.log(response));
-		}
+    // check if user is logged in and call correct api
+    if (user) {
+      axios
+        .post("http://localhost:8080/api/v1/ticket/checkout/ru", {
+          showtimeId: showtimeId,
+          buyerEmail: user.email,
+          seats: props.seats,
+        })
+        .then(() => {
+          alert("Tickets successfuly purchased!");
+          navigate("/");
+        })
+        .catch((response) => console.log(response));
+    } else {
+      axios
+        .post("http://localhost:8080/api/v1/ticket/checkout/guest", {
+          showtimeId: showtimeId,
+          buyerEmail: email,
+          seats: props.seats,
+          firstName: firstName,
+          lastName: lastName,
+          ccv: ccv,
+          cardNumber: ccNo,
+          expiryDate: expDate,
+          address: address,
+          selectedSeats: props.seats,
+        })
+        .then(() => {
+          alert("Ticket successfuly purchased!");
+          navigate("/");
+        })
+        .catch((response) => {
+          alert(response.response.data.message);
+          console.log(response);
+        });
+    }
   };
 
+  // make sure only numbers are entered and credit card number is not more tahn 16 digits
   const handleCCInput = (event) => {
     const val = event.target.value;
     if (val === "" || (val.length < 17 && /^-?\d+$/.test(val))) {
@@ -97,6 +113,7 @@ const Checkout = (props) => {
     }
   };
 
+  // make sure only numbers are entered and ccv is not more tahn 3 digits
   const handleCCVInput = (event) => {
     const val = event.target.value;
     if (val === "" || (val.length < 4 && /^-?\d+$/.test(val))) {
@@ -104,6 +121,7 @@ const Checkout = (props) => {
     }
   };
 
+  // make sure only numbers are entered and expirty date is not more tahn 4 digits
   const handleExpDateInput = (event) => {
     const val = event.target.value;
     if (val === "" || (val.length < 5 && /^-?\d+$/.test(val))) {
@@ -111,6 +129,7 @@ const Checkout = (props) => {
     }
   };
 
+  // if user is logged in display just purchase button
   if (user) {
     return (
       <div
@@ -134,6 +153,7 @@ const Checkout = (props) => {
       </div>
     );
   }
+  // if guest checkout, display checkout form
   return (
     <>
       <SubTitle>

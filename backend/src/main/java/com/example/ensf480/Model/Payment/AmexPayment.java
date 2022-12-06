@@ -1,5 +1,6 @@
 package com.example.ensf480.Model.Payment;
 
+// AmexPayment strategy incase user pays via Amex
 public class AmexPayment implements PaymentStrategy {
     @Override
     public boolean processPayment(double amount) {

@@ -66,8 +66,9 @@ const Register = () => {
   const [expDate, setExpDate] = useState("");
   const [errMessage, setErrMessage] = useState();
 
+  // check validity of each input field
   const validForm = () => {
-    const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    const emailRgx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i; // regex to check for valid email
     return (
       emailRgx.test(email) &&
       password != "" &&
@@ -80,6 +81,7 @@ const Register = () => {
     );
   };
 
+  // get input values and submit to api to create account
   const handleSubmit = () => {
     const data = {
       email,
@@ -102,6 +104,7 @@ const Register = () => {
       });
   };
 
+  // make sure only numbers are entered and credit card number is not more tahn 16 digits
   const handleCCInput = (event) => {
     const val = event.target.value;
     if (val === "" || (val.length < 17 && /^-?\d+$/.test(val))) {
@@ -109,6 +112,7 @@ const Register = () => {
     }
   };
 
+  // make sure only numbers are entered and ccv is not more tahn 3 digits
   const handleCCVInput = (event) => {
     const val = event.target.value;
     if (val === "" || (val.length < 4 && /^-?\d+$/.test(val))) {
@@ -116,6 +120,7 @@ const Register = () => {
     }
   };
 
+  // make sure only numbers are entered and expirty date is not more tahn 4 digits
   const handleExpDateInput = (event) => {
     const val = event.target.value;
     if (val === "" || (val.length < 5 && /^-?\d+$/.test(val))) {

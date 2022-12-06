@@ -54,21 +54,22 @@ const SeatContainer = styled(Grid)({
 const SeatSelection = () => {
   // Object that has movie attributes
   const location = useLocation();
-  const { user, setUser } = useContext(UserContext);
   const [selectedSeats, setSelectedSeats] = useState([]); // keep track of which seats have been selected
-  const [unavailableSeats, setUnavailableSeats] = useState([]);
+  const [unavailableSeats, setUnavailableSeats] = useState([]); // seats already purchased/unavailable
   // 48 seats per theatre
   const seats = [];
   for (let i = 0; i < 48; i++) {
     seats.push(i + 1);
   }
 
+  // on page load, get unavailable seats
   useEffect(() => {
     getUnavailableSeats();
   }, []);
 
   const getUnavailableSeats = () => {
-    const showtime_id = location.state.movie["selectedShowtime"]["showtimeId"];
+    const showtime_id = location.state.movie["selectedShowtime"]["showtimeId"]; // get showtime
+    // make api call to get seats already purchased/unavailable
     axios
       .get(`http://localhost:8080/api/v1/ticket/seats/by/${showtime_id}`, {})
       .then((response) => {
@@ -87,11 +88,22 @@ const SeatSelection = () => {
       setSelectedSeats(updatedSeats);
     } else {
       // add seat to selection
-      const updatedSeats = [...selectedSeats, seat];
-      setSelectedSeats(updatedSeats);
+
+      // if not presale -> select seat
+      if (!location.state.movie.selectedShowtime.presale) {
+        const updatedSeats = [...selectedSeats, seat];
+        setSelectedSeats(updatedSeats);
+      } else {
+        // if presale, make sure only 10% seats are selected/purchased
+        if (selectedSeats.length + unavailableSeats.length < 4) {
+          const updatedSeats = [...selectedSeats, seat];
+          setSelectedSeats(updatedSeats);
+        }
+      }
     }
   };
 
+  // convert showtime to human readable form
   const convertTime = (time) => {
     let unixtime = Date.parse(time);
     unixtime /= 1000;
@@ -129,6 +141,9 @@ const SeatSelection = () => {
         <Body>
           {convertTime(location.state.movie.selectedShowtime.timestamp)}
         </Body>
+        {location.state.movie.selectedShowtime.presale ? (
+          <Body style={{ paddingTop: "1%", color: "#E16138" }}>Presale</Body>
+        ) : null}
         <TheatreContainer>
           <Screen>SCREEN</Screen>
           <SeatContainer container spacing={2}>

@@ -6,6 +6,7 @@ import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import { Navigate, useNavigate } from "react-router";
 import { MoviesContext } from "../context/MoviesContext.js";
+import { UserContext } from "../context/UserContext";
 import moment from "moment";
 
 const MovieListContainer = styled("ul")({
@@ -65,30 +66,46 @@ const DropdownMenuStyle = {
 
 const MovieItem = ({ search }) => {
   const { movies, setMovies } = useContext(MoviesContext);
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
+  // update selectedShowtime property for movie on dropdown select
   const handleTimeChange = (event, data) => {
-    let newMovies = [...movies];
+    let newMovies = [...movies]; // create shallow copy of current movies context
     for (let i = 0; i < movies.length; i++) {
       if (newMovies[i].id == data.id) {
+        // get movie we are changing showtime for
         for (let j = 0; j < newMovies[i].showtimes.length; j++) {
           if (newMovies[i].showtimes[j].timestamp == event.target.value) {
-            newMovies[i].selectedShowtime = newMovies[i].showtimes[j];
+            // find new selected shwotime
+            newMovies[i].selectedShowtime = newMovies[i].showtimes[j]; // update selected showtime for movie
             break;
           }
         }
         break;
       }
     }
-    setMovies(newMovies);
+    setMovies(newMovies); // update movies context with new list of movies contianinig updated selectedShowtime property for movie
   };
 
+  // used to determin if presale showtime should be shown
+  const showShowtime = (showtime) => {
+    // if its not a presale -> always show
+    if (!showtime.presale) {
+      return true;
+    }
+    // if it is a presale -> only show if user logged in
+    return user != null;
+  };
+
+  // get timestamp and convert into readable human format
   const convertTime = (time) => {
     let unixtime = Date.parse(time);
     unixtime /= 1000;
     return moment.unix(unixtime).format("MMM Do YYYY, h:mm A");
   };
 
+  // direct user to seat selection page for selected showtime
   const handleClick = (movie) => {
     console.log(movie);
     navigate("/seatselection", {
@@ -98,6 +115,7 @@ const MovieItem = ({ search }) => {
     });
   };
 
+  // if there are no movies for search query, dispaly message
   if (
     movies.filter((data) => data.name.toLowerCase().includes(search)).length ==
     0
@@ -109,6 +127,7 @@ const MovieItem = ({ search }) => {
     );
   }
 
+  // if there are movies render list of movies
   return (
     <>
       <MovieListContainer>
@@ -125,14 +144,18 @@ const MovieItem = ({ search }) => {
                     value={data.selectedShowtime.timestamp}
                     onChange={(event) => handleTimeChange(event, data)}
                   >
-                    {data.showtimes.map((showtime) => (
-                      <MenuItem
-                        key={showtime.showtimeId}
-                        value={showtime.timestamp}
-                      >
-                        {convertTime(showtime.timestamp)}
-                      </MenuItem>
-                    ))}
+                    {data.showtimes.map(
+                      (showtime) =>
+                        showShowtime(showtime) && (
+                          <MenuItem
+                            key={showtime.showtimeId}
+                            value={showtime.timestamp}
+                          >
+                            {convertTime(showtime.timestamp)}
+                            {showtime.presale ? " (Presale)" : null}
+                          </MenuItem>
+                        )
+                    )}
                   </Select>
                 </FormControl>
                 <ViewSeatsButton
