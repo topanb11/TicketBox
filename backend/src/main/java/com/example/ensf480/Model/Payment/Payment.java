@@ -9,22 +9,24 @@ import org.springframework.web.server.ResponseStatusException;
 
 // Concrete payment class that uses PaymentStrategy interface
 public class Payment {
-		// Instance of PaymentStrategy
+    // Instance of PaymentStrategy
     private PaymentStrategy paymentStrategy;
-		// Credit card number
+    // Credit card number
     private String ccNo;
-		// CCV number
+    // CCV number
     private int ccv;
-		// Expiration date
+    // Expiration date
     private String expDate;
 
-		/**
-		 * Constructo for Payment object
-		 * @param paymentStrategy - Instance of payment strategy depending on how user pays for order
-		 * @param ccNo - Credit card number
-		 * @param ccv - CCV number
-		 * @param expDate - Expiration Date
-		 */
+    /**
+     * Constructo for Payment object
+     * 
+     * @param paymentStrategy - Instance of payment strategy depending on how user
+     *                        pays for order
+     * @param ccNo            - Credit card number
+     * @param ccv             - CCV number
+     * @param expDate         - Expiration Date
+     */
     public Payment(PaymentStrategy paymentStrategy, String ccNo, int ccv, String expDate) {
         this.paymentStrategy = paymentStrategy;
         this.ccNo = ccNo;
@@ -32,23 +34,31 @@ public class Payment {
         this.expDate = expDate;
     }
 
-		/**
-		 * Setter to change payment strategy
-		 * @param paymentStrategy - Instance of PaymentStrategy
-		 */
+    /**
+     * Setter to change payment strategy
+     * 
+     * @param paymentStrategy - Instance of PaymentStrategy
+     */
     public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
         this.paymentStrategy = paymentStrategy;
     }
 
-		/**
-		 * Checks if expiration date is valid
-		 * @param expDate - Expiration date
-		 * @return boolean
-		 */
+    /**
+     * Checks if expiration date is valid
+     * 
+     * @param expDate - Expiration date
+     * @return boolean
+     */
     public boolean validExpDate(String expDate) {
+        String monthStr = expDate.substring(0, 2);
+        int month = Integer.parseInt(monthStr);
+        if (month < 1 || month > 12) {
+            return false;
+        }
         try {
-            Date expirationDate = new SimpleDateFormat("dd/MM/yyyy").parse(expDate);
-            Date currentDate = new Date(); 
+            Date expirationDate = new SimpleDateFormat("MMyy").parse(expDate);
+            System.out.println("expirationDate: " + expirationDate.getTime());
+            Date currentDate = new Date();
             if (expirationDate.after(currentDate)) {
                 return true;
             } else {
