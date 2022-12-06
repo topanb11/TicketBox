@@ -114,9 +114,9 @@ public class TicketPostgresAccessService implements TicketDao {
         int res = jdbcTemplate.update(DELETE_QUERY, args);
         if (res == 1) {
             if (isRu) {
-                return "Successfuly refunded ticket with no fee!";
+                return "Successfully refunded ticket with no fee!";
             }
-            return "You have successfuly received a refund of $14.87";
+            return "You have successfully received a refund of $14.87";
         }
         return "Could not find ticket.";
     }
