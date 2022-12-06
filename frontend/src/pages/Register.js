@@ -93,6 +93,19 @@ const Register = () => {
       ccv,
       expiryDate: expDate,
     };
+    // first validate expiry date
+    var today, someday;
+    var exMonth = expDate.substring(0, 2);
+    var exYear = expDate.substring(2);
+    today = new Date();
+    someday = new Date();
+    someday.setFullYear(20 + exYear, exMonth, 0);
+    // alert user if credit card expirt date is incorrect
+    if (parseInt(exMonth) < 1 || parseInt(exMonth) > 12 || someday < today) {
+      alert("Invalid expiry date.");
+      return;
+    }
+    // if expiry date is correct -> make api call
     axios
       .post("http://localhost:8080/api/v1/user/create", data)
       .then((res) => {
