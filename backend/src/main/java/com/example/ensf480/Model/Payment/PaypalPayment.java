@@ -7,4 +7,13 @@ public class PaypalPayment implements PaymentStrategy {
         System.out.println("Processing $" + amount + " Paypal payment");
         return true;
     }
+
+    @Override
+    public boolean refund(double amount, String email) {
+        // Implement logic to refund a Paypal payment
+        System.out.println("Refunding $" + amount + " Paypal payment, for " + email);
+        return true;
+    }
+
+    
 }

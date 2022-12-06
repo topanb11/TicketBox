@@ -7,4 +7,11 @@ public class VisaPayment implements PaymentStrategy {
         System.out.println("Processing $" + amount + " Visa payment");
         return true;
     }
+
+    @Override
+    public boolean refund(double amount, String email) {
+        // Implement logic to refund a Visa payment
+        System.out.println("Refunding $" + amount + " Visa payment for " + email);
+        return true;
+    }
 }

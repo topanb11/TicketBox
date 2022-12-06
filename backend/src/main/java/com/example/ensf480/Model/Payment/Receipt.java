@@ -52,4 +52,8 @@ public class Receipt {
         return "$" + String.valueOf(costPerTicket);
     }
 
+    public static Double getCostPerTicketNumerical() {
+        return costPerTicket;
+    }
+
 }

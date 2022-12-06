@@ -21,7 +21,7 @@ public class EmailApiSingleton {
     private static final String FROM_EMAIL = "TicketBoxConfirmation@gmail.com";
 
     private EmailApiSingleton() {
-        sendGridClient = new SendGrid(System.getenv("SENDGRID_API_KEY"));
+        sendGridClient = new SendGrid(API_KEY);
     }
 
     public static EmailApiSingleton getOnlyInstance() {
@@ -64,7 +64,42 @@ public class EmailApiSingleton {
 
         Mail mail = new Mail(from, subject, toEmail, content);
 
-        SendGrid sg = new SendGrid(API_KEY);
+        SendGrid sg = this.sendGridClient;
+        Request request = new Request();
+
+        request.setMethod(Method.POST);
+        request.setEndpoint("mail/send");
+        try {
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getHeaders());
+            System.out.println(response.getBody());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRefundEmail(boolean isRu, String to, String id) {
+        Email from = new Email(FROM_EMAIL);
+        Email toEmail = new Email(to);
+
+        String subject = "Your Ticket has been refunded";
+
+        String htmlContent = "";
+        if (isRu) {
+            htmlContent += "<h3>You have successfully refunded ticket no: " + id + "</h3>";
+        } else {
+            htmlContent += "<h3>You have successfully refunded ticket no: " + id + "</h3>";
+            htmlContent += "<h3>$" + 0.85 * Receipt.getCostPerTicketNumerical() + " (15%) has been withheld as a cancellation fee. </h3>";
+        }
+
+        Content content = new Content("text/html", htmlContent);
+
+        Mail mail = new Mail(from, subject, toEmail, content);
+
+        SendGrid sg = this.sendGridClient;
         Request request = new Request();
 
         request.setMethod(Method.POST);
@@ -81,5 +116,6 @@ public class EmailApiSingleton {
         }
 
 
+       
     }
 }

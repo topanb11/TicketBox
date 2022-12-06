@@ -12,4 +12,6 @@ public interface TicketDao {
 
     List<Integer> getSeatsByShowtime(UUID showtime_id);
 
+    Ticket getTicketById(String id);
+
 }
