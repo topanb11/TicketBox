@@ -66,6 +66,30 @@ public class TicketPostgresAccessService implements TicketDao {
 
     // Function to remove a Ticket from the database table
     @Override
+    public Ticket getTicketById(String id) {
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please enter a valid ticket number.");
+        }
+        Ticket result;
+        try {
+            result = jdbcTemplate.queryForObject(GET_TICKET, (resultSet, i) -> {
+                Ticket temp = new Ticket(
+                        resultSet.getString("showtimeId"),
+                        resultSet.getInt("seatNo"),
+                        resultSet.getString("buyerEmail"),
+                        resultSet.getBoolean("ruFlag"));
+                return temp;
+            }, UUID.fromString(id));
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Could not find ticket");
+        }
+        return result;
+    }
+
+    @Override
     public String deleteTicket(String id, Boolean isRu) {
         UUID uuid;
         try {

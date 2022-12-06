@@ -43,7 +43,19 @@ public class TicketService {
     public String deleteTicket(Map<String, Object> ticketMap) {
         String id = (String) ticketMap.get("ticketNo");
         Boolean isRu = (Boolean) ticketMap.get("isRu");
-        return ticketDao.deleteTicket(id, isRu);
+        Ticket ticket = ticketDao.getTicketById(id);
+        ticketDao.deleteTicket(id, isRu);
+
+        
+        if (isRu) {
+            System.out.println("Ticket " + id + " has been refunded");
+            EmailApiSingleton.getOnlyInstance().sendRefundEmail(isRu, ticket.getBuyerEmail(), id);
+        } else {
+            System.out.println("Ticket " + id + " has been refunded and a 15% fee has been charged");
+            EmailApiSingleton.getOnlyInstance().sendRefundEmail(isRu, ticket.getBuyerEmail(), id);
+        }
+
+        return "Ticket " + id + " has been refunded";
     }
 
 		// Method to get seats by showtime

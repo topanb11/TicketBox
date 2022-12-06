@@ -8,4 +8,5 @@ public interface PaymentStrategy {
 		 * @return boolean
 		 */
     boolean processPayment(double amount);
+    boolean refund(double amount, String email);
 }

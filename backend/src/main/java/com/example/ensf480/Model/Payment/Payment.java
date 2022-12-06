@@ -2,7 +2,6 @@ package com.example.ensf480.Model.Payment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.http.HttpStatus;
@@ -47,15 +46,9 @@ public class Payment {
 		 * @return boolean
 		 */
     public boolean validExpDate(String expDate) {
-        String monthStr = expDate.substring(0, 2);
-        int month = Integer.parseInt(monthStr);
-        if (month < 1 || month > 12) {
-            return false;
-        }
         try {
-            Date expirationDate = new SimpleDateFormat("MMyy").parse(expDate);
-            System.out.println("expirationDate: " + expirationDate.getTime());
-            Date currentDate = new Date();
+            Date expirationDate = new SimpleDateFormat("dd/MM/yyyy").parse(expDate);
+            Date currentDate = new Date(); 
             if (expirationDate.after(currentDate)) {
                 return true;
             } else {
@@ -66,11 +59,10 @@ public class Payment {
         }
     }
 
-		/**
-		 * Method to process payment
-		 * @param amount - cost of tickets
-		 * @return String
-		 */
+    public Boolean processRefund(double amount, String email) {
+        return paymentStrategy.refund(amount, email);
+    }
+
     public String processPayment(double amount) {
         if (!validExpDate(expDate)) {
             return "Invalid Expiry Date";
