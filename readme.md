@@ -1,4 +1,4 @@
-# Movie Ticket App
+# TicketBox
 
 ## Built with:
 <div>
